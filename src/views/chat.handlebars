@@ -1,0 +1,115 @@
+<section id="chat">
+  <div id="chat-modal">
+    <h1>global:</h1>
+    <ul id="lista-mensajes" style="">
+    </ul>
+  </div>
+  <form id="messagesForm">
+    <input type="text" id="messageInput" name="message" placeholder="message" required>
+    <button type="submit" id="button">Enviar</button>
+  </form>
+  <p id="user" class="hidden">{{user.email}}</p>
+</section>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+ 
+        socket.on('Chat', (messages) => {
+        
+        const listaMensajes = document.getElementById('lista-mensajes');
+        
+        listaMensajes.innerHTML = '';
+        
+            messages.forEach(messages => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+
+            const user = document.createElement('h5');
+            user.textContent = messages.user;
+
+            const message = document.createElement('p');
+            message.textContent = messages.message;
+            // Agrega elementos a la tarjeta
+            card.appendChild(user);
+            card.appendChild(message);
+    
+            // Agrega la tarjeta a la lista de productos
+            listaMensajes.appendChild(card);
+        });
+        });
+
+        document.getElementById("messagesForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevenir el envío del formulario
+
+      // Obtener los valores de los campos del formulario
+      const user = document.getElementById("user").textContent;
+      const message = document.getElementById("messageInput").value;
+      
+      const messageSent = {
+        user: user,
+        message: message,
+      };
+      
+        socket.emit('newChat',messageSent);
+          messageInput.value = "";
+
+    });
+    </script>
+    <style>
+      #chat{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #chat-modal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 700px;
+        height: 85vh;
+      }
+      #lista-mensajes{
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        margin-bottom: 2px;
+      }
+      .card{
+        margin-bottom: 10px;
+        margin-right: 10px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+      #messagesForm{
+        display: flex;
+        align-items: center;
+      }
+      #messageInput{
+        width: 550px;
+        height: 30px;
+        margin-right: 10px;
+
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      #button{
+        width: 150px;
+        height: 30px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .hidden{
+        display: none;
+      }
+
+    </style>
+</div>

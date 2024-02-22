@@ -1,0 +1,53 @@
+paths:
+  /api/products:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+#       responses:
+#         200:
+#           description: OK
+#           content:
+#             application/json:
+#               schema:
+#                 type: object
+#                 properties:
+#                   status:
+#                     type: string
+#                     example: ok
+# #                   payload:
+# #                     type: array
+# #                     items:
+# #                       $ref: "#/components/schemas/Product"
+
+# # components:
+# #   schemas:
+# #     Product:
+# #       type: object
+# #       properties:
+# #         title:
+# #           type: string
+# #           example: Product ABC
+# #         description:
+# #           type: string
+# #           example: Description ABC
+# #         code:
+# #           type: string
+# #           example: ABC123
+# #         price:
+# #           type: number
+# #           example: 19.99
+# #         status:
+# #           type: boolean
+# #           example: true
+# #         stock:
+# #           type: number
+# #           example: 10
+# #         category:
+# #           type: string
+# #           example: Category ABC
+# #         thumbnail:
+# #           type: array
+# #           items:
+# #             type: string
+# #             example: https://example.com/image.png

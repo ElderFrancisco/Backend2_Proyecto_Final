@@ -1,0 +1,33 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <title>Elder Web</title>
+  </head>
+  <body>
+    <header id="header">
+      <ul id="ulheader">
+        {{#if user.rol}}
+
+          <li class="li-header"><a href="/">Home</a></li>
+          <li class="li-header"><a href="/products">Productos</a></li>
+          <li class="li-header"><a href="/current">Current</a></li>
+          <li class="li-header"><a href="/chat">Chat</a></li>
+          <li class="li-header"><a href="/cart/{{user.cartId}}">Carrito</a></li>
+          <li class="li-header"><a href="/api/session/logout">Cerrar Sesión</a></li>
+
+        {{else}}
+          <li class="li-header"><a href="/">Home</a></li>
+
+          <li class="li-header"><a href="/login">Iniciar Sesión</a></li>
+          <li class="li-header"><a href="/register">Registrate</a></li>
+
+        {{/if}}
+
+      </ul>
+
+    </header>
+    {{{body}}}
+  </body>
+</html>

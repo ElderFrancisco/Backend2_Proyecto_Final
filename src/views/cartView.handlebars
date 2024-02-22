@@ -1,0 +1,96 @@
+<div>
+  <h1 style="color: #333; text-align: center;">Cart:{{cart._id}}</h1>
+  <p id="cartId" style="display:none">{{cart._id}}</p>
+  <ul
+    style="list-style-type: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;"
+  >
+    {{#each cart.products}}
+      <li id="li-card-{{product._id}}"
+        class="card"
+        style="width: 300px; margin: 20px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center; text-align: center;"
+      >
+        <h2
+          style="color: #333; margin: 0; font-size: 24px;"
+        >{{product.title}}</h2>
+        <p style="margin: 10px 0;">Precio: ${{product.price}}</p>
+        <p style="margin: 10px 0;">Código: {{product.code}}</p>
+        <p style="margin: 10px 0;">Stock: {{product.stock}}</p>
+
+        {{#if product.thumbnail}}
+          <img
+            src="{{product.thumbnail}}"
+            alt="{{product.title}}"
+            width="100"
+            style="max-width: 100%; height: auto;"
+          />
+        {{else}}
+          <p style="margin: 10px 0;">Imagen no disponible</p>
+        {{/if}}
+        <div id="quantity">
+          <h2>Cantidad</h2>
+          <p id="card-quantity-{{product._id}}">{{quantity}}</p>
+          <button onclick="addProduct('{{product._id}}')">Agregar</button>
+          <button onclick="removeProduct('{{product._id}}')" >Quitar</button>
+        </div>
+      </li>
+
+    {{/each}}
+  </ul>
+  <div id="pagination" style="display: flex; justify-content: center">
+
+  </div>
+</div>
+
+<script>
+  
+  function addProduct(product) {
+    const cart = ('{{cart._id}}');
+      fetch(`/api/carts/${cart}/product/${product}`, {
+        method: 'POST'
+      })
+      .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+        return response.json();
+    })
+      .then(data => {
+        const productsList = data.payload.products
+         const productInfo = productsList.find(p => p.product === product);
+        const quantityProduct = document.getElementById(`card-quantity-${product}`)
+        quantityProduct.textContent = productInfo.quantity
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      });
+    }
+
+
+     function removeProduct(product) {
+    const cart = ('{{cart._id}}');
+      fetch(`/api/carts/${cart}/product/${product}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+        return response.json();
+    })
+      .then(data => {
+        const productsList = data.payload.products
+         const productInfo = productsList.find(p => p.product === product);
+         if (!productInfo) {
+          const quantityProduct = document.getElementById(`li-card-${product}`)
+          quantityProduct.remove()
+         }else{
+          const quantityProduct = document.getElementById(`card-quantity-${product}`)
+          quantityProduct.textContent = productInfo.quantity
+         }
+      
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      });
+    }
+</script>
