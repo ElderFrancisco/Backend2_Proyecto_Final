@@ -10,7 +10,7 @@ paths:
       tags:
         - Productos
       parameters:
-        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cookieJWT'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/query'
@@ -94,8 +94,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - cookieAuth: []
 
     post:
       summary: Crear un nuevo producto
@@ -134,16 +132,54 @@ paths:
                     thumbnail:
                       - 'https://example.com/thumbnail.jpg'
                     owner: 'owner1@example.com'
-
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - cookieAuth: []
-
+  /api/products/{pid}:
+    get:
+      summary: Obtener un solo producto
+      tags:
+        - Productos
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/pid'
+      responses:
+        '200':
+          description: Creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: '#/components/schemas/Product'
+                example:
+                  status: success
+                  payload:
+                    _id: '1'
+                    title: 'Cepillo de Dientes'
+                    description: 'Cepillo de dientes color rosa'
+                    code: 'CEP203'
+                    price: 100
+                    status: true
+                    stock: 100
+                    category: Higiene
+                    thumbnail:
+                      - 'https://example.com/thumbnail.jpg'
+                    owner: 'owner1@example.com'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
     Product:
@@ -222,7 +258,7 @@ components:
       description: Cookie que guarda la sesión en JWT
       schema:
         type: string
-        default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY1ZDdkYTAxNGYxZTU0NTc4NTFkOGZhMyIsImZpcnN0X25hbWUiOiJBcGkiLCJsYXN0X25hbWUiOiJUZXN0aW5nIiwiZW1haWwiOiJhcGlAZmFrZS1hcGkudGVzdCIsInJvbCI6InVzZXIiLCJjYXJ0SWQiOiI2NWQ3ZGEwMTRmMWU1NDU3ODUxZDhmYTEifSwiaWF0IjoxNzA4NjQ0ODc2LCJleHAiOjE3MDg3MzEyNzZ9.UN1D_YZAHQgMNdXqSz56J5BWUQ2OAS8DoY6tKgxWoU4
+        default: cookieJWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY1ZDdkYTAxNGYxZTU0NTc4NTFkOGZhMyIsImZpcnN0X25hbWUiOiJBcGkiLCJsYXN0X25hbWUiOiJUZXN0aW5nIiwiZW1haWwiOiJhcGlAZmFrZS1hcGkudGVzdCIsInJvbCI6InVzZXIiLCJjYXJ0SWQiOiI2NWQ3ZGEwMTRmMWU1NDU3ODUxZDhmYTEifSwiaWF0IjoxNzA4Njk4MzkzLCJleHAiOjE3MDg3ODQ3OTN9.x1M0lmqrXQUHwXIvAgvJ8I4qxym0K9f4nRNbPXat9Fk
     page:
       name: page
       in: query
@@ -249,6 +285,14 @@ components:
       required: false
       schema:
         type: object
+    pid:
+      name: pid
+      in: path
+      required: true
+      description: ID del producto
+      schema:
+        type: string
+        default: 65d3d1e06c0b43439d9add45
   responses:
     UnauthorizedError:
       description: Error de autenticación
@@ -257,7 +301,20 @@ components:
           schema:
             type: string
             example: Unauthorized
-
+    ConflictError:
+      description: Error de conflicto
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: Already exists
     InternalServerError:
       description: Error interno del servidor
       content:
@@ -267,6 +324,8 @@ components:
             properties:
               status:
                 type: string
+            example:
+              status: error
 
     BadRequestError:
       description: Error de petición
@@ -283,9 +342,24 @@ components:
               status: error
               error: Not sent correct data
 
+    NotFoundError:
+      description: Error de no encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: Not found
+
   securitySchemes:
     cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
       type: apiKey
-      in: cookie
+      in: Set-Cookie
       name: cookieJWT
       description: Autenticación con cookie

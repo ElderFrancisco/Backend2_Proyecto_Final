@@ -69,9 +69,7 @@ export const addProduct = async (req, res) => {
       code: req.body.code,
     });
     if (productCode) {
-      return res
-        .status(400)
-        .json({ status: 'error', error: 'Product code already exists' });
+      return res.status(409).json({ status: 'error', error: 'Already exists' });
     }
 
     const NewProduct = await ProductService.create(req.body);
@@ -86,21 +84,18 @@ export const addProduct = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const Id = req.params.pid;
-    if (!isValidMongoId(pid)) {
+    if (!isValidMongoId(Id)) {
       return res
         .status(400)
         .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const productId = await ProductService.getByID(Id);
     if (productId == null) {
-      req.logger.info('Product not found');
-      return res
-        .status(404)
-        .json({ status: 'error', error: 'Product Not Found' });
+      return res.status(404).json({ status: 'error', error: 'Not found' });
     }
     return res.status(200).json({ status: 'success', payload: productId });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error('error getProductById :', error);
     return res.status(500).json({ status: 'error' });
   }
 };
