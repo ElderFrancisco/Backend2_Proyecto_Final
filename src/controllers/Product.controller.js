@@ -65,6 +65,15 @@ export const addProduct = async (req, res) => {
       req.body.owner = req.user.user.email;
     }
 
+    const productCode = await ProductService.getByQuery({
+      code: req.body.code,
+    });
+    if (productCode) {
+      return res
+        .status(400)
+        .json({ status: 'error', error: 'Product code already exists' });
+    }
+
     const NewProduct = await ProductService.create(req.body);
 
     return res.status(201).json({ status: 'success', payload: NewProduct });

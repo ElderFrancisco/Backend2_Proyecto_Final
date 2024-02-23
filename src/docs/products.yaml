@@ -194,6 +194,8 @@ components:
           type: number
         status:
           type: boolean
+        code:
+          type: string
         stock:
           type: number
         category:
@@ -205,6 +207,7 @@ components:
       example:
         title: Cepillo de Dientes
         description: Cepillo de dientes color rosa
+        code: CEP203
         price: 100
         status: true
         stock: 100

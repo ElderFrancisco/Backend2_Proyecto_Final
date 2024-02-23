@@ -1,4 +1,4 @@
-import productModel from "./models/products.model.js";
+import productModel from './models/products.model.js';
 
 export default class Product {
   get = async () => {
@@ -9,6 +9,9 @@ export default class Product {
   };
   getByID = async (id) => {
     return productModel.findById(id).lean();
+  };
+  getByQuery = async (query) => {
+    return productModel.findOne(query);
   };
   update = async (data) => {
     return productModel.findOneAndUpdate({ _id: data._id }, data, {

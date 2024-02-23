@@ -5,6 +5,7 @@ export default class ProductCreateDTO {
     this.description = product?.description;
     this.price = product?.price;
     this.status = product?.status;
+    this.code = product?.code;
     this.stock = product?.stock;
     this.category = product?.category;
     this.thumbnail = product?.thumbnail;

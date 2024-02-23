@@ -12,6 +12,9 @@ export default class ProductRepository {
   get = async () => {
     return this.dao.get();
   };
+  getByQuery = async (query) => {
+    return this.dao.getByQuery(query);
+  };
   getByID = async (id) => {
     return this.dao.getByID(id);
   };
