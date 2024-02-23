@@ -1,53 +1,288 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Product API
+  description: API para gestionar productos
 paths:
   /api/products:
     get:
-      summary: Get all products
+      summary: Obtener todos los productos
       tags:
-        - Products
-#       responses:
-#         200:
-#           description: OK
-#           content:
-#             application/json:
-#               schema:
-#                 type: object
-#                 properties:
-#                   status:
-#                     type: string
-#                     example: ok
-# #                   payload:
-# #                     type: array
-# #                     items:
-# #                       $ref: "#/components/schemas/Product"
+        - Productos
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: Productos obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalPages:
+                    type: number
+                  prevPage:
+                    type: number
+                  nextPage:
+                    type: number
+                  page:
+                    type: number
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevLink:
+                    type: string
+                  nextLink:
+                    type: string
+                example:
+                  status: ok
+                  payload:
+                    - _id: '1'
+                      title: 'Producto 1'
+                      description: 'Descripción del producto 1'
+                      code: 'P1'
+                      price: 10.99
+                      status: true
+                      stock: 100
+                      category: 'Categoría 1'
+                      thumbnail:
+                        - 'https://example.com/thumbnail1.jpg'
+                      owner: 'owner1@example.com'
+                    - _id: '2'
+                      title: 'Producto 2'
+                      description: 'Descripción del producto 2'
+                      code: 'P2'
+                      price: 20.99
+                      status: true
+                      stock: 50
+                      category: 'Categoría 2'
+                      thumbnail:
+                        - 'https://example.com/thumbnail2.jpg'
+                      owner: 'owner2@example.com'
+                    - _id: '3'
+                      title: 'Producto 3'
+                      description: 'Descripción del producto 3'
+                      code: 'P3'
+                      price: 30.99
+                      status: true
+                      stock: 200
+                      category: 'Categoría 1'
+                      thumbnail:
+                        - 'https://example.com/thumbnail3.jpg'
+                      owner: 'owner3@example.com'
+                  totalPages: 1
+                  prevPage: 1
+                  nextPage: 1
+                  page: 1
+                  hasPrevPage: false
+                  hasNextPage: false
+                  prevLink: null
+                  nextLink: null
 
-# # components:
-# #   schemas:
-# #     Product:
-# #       type: object
-# #       properties:
-# #         title:
-# #           type: string
-# #           example: Product ABC
-# #         description:
-# #           type: string
-# #           example: Description ABC
-# #         code:
-# #           type: string
-# #           example: ABC123
-# #         price:
-# #           type: number
-# #           example: 19.99
-# #         status:
-# #           type: boolean
-# #           example: true
-# #         stock:
-# #           type: number
-# #           example: 10
-# #         category:
-# #           type: string
-# #           example: Category ABC
-# #         thumbnail:
-# #           type: array
-# #           items:
-# #             type: string
-# #             example: https://example.com/image.png
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductToPost'
+      responses:
+        '201':
+          description: Creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    $ref: '#/components/schemas/Product'
+                example:
+                  status: success
+                  payload:
+                    _id: '1'
+                    title: 'Cepillo de Dientes'
+                    description: 'Cepillo de dientes color rosa'
+                    code: 'CEP203'
+                    price: 100
+                    status: true
+                    stock: 100
+                    category: Higiene
+                    thumbnail:
+                      - 'https://example.com/thumbnail.jpg'
+                    owner: 'owner1@example.com'
+
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - cookieAuth: []
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnail:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+      example:
+        _id: ObjectId('652acba407d8295adeab421d')
+        title: Cepillo de Dientes
+        description: Cepillo de dientes color rosa
+        code: CEP203
+        price: 100
+        status: true
+        stock: 100
+        category: Higiene
+        thumbnail:
+          - 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ampri.es%2FCepillo-dental-desechable-PS-con-pasta-dentifrica-color-rosa-15-x-2-6-cm-Med-Comfort-comprar-cepillo-dental-desechable-de-poliestireno-para-viajes-y-uso-antes-del-tratamiento-dental-como-material-dental.%2F09590-P&psig=AOvVaw2mnyvwFDHgVH5Uz6xqKClm&ust=1708729908026000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOjm9oqJwIQDFQAAAAAdAAAAABAE'
+        owner: user@example.com
+    ProductToPost:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnail:
+          type: array
+          items:
+            type: string
+      example:
+        title: Cepillo de Dientes
+        description: Cepillo de dientes color rosa
+        price: 100
+        status: true
+        stock: 100
+        category: Higiene
+        thumbnail:
+          - 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ampri.es%2FCepillo-dental-desechable-PS-con-pasta-dentifrica-color-rosa-15-x-2-6-cm-Med-Comfort-comprar-cepillo-dental-desechable-de-poliestireno-para-viajes-y-uso-antes-del-tratamiento-dental-como-material-dental.%2F09590-P&psig=AOvVaw2mnyvwFDHgVH5Uz6xqKClm&ust=1708729908026000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOjm9oqJwIQDFQAAAAAdAAAAABAE'
+  parameters:
+    cookieJWT:
+      name: cookieJWT
+      in: header
+      required: true
+      description: Cookie que guarda la sesión en JWT
+      schema:
+        type: string
+        default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY1ZDdkYTAxNGYxZTU0NTc4NTFkOGZhMyIsImZpcnN0X25hbWUiOiJBcGkiLCJsYXN0X25hbWUiOiJUZXN0aW5nIiwiZW1haWwiOiJhcGlAZmFrZS1hcGkudGVzdCIsInJvbCI6InVzZXIiLCJjYXJ0SWQiOiI2NWQ3ZGEwMTRmMWU1NDU3ODUxZDhmYTEifSwiaWF0IjoxNzA4NjQ0ODc2LCJleHAiOjE3MDg3MzEyNzZ9.UN1D_YZAHQgMNdXqSz56J5BWUQ2OAS8DoY6tKgxWoU4
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: number
+        default: 1
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: number
+        default: 10
+    query:
+      name: query
+      in: query
+      required: false
+      schema:
+        type: object
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: object
+  responses:
+    UnauthorizedError:
+      description: Error de autenticación
+      content:
+        application/json:
+          schema:
+            type: string
+            example: Unauthorized
+
+    InternalServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+
+    BadRequestError:
+      description: Error de petición
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: Not sent correct data
+
+  securitySchemes:
+    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: cookieJWT
+      description: Autenticación con cookie

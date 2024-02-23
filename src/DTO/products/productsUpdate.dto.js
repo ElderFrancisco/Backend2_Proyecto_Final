@@ -3,7 +3,6 @@ export default class ProductUpdateDTO {
     this._id = product?._id;
     this.title = product?.title;
     this.description = product?.description;
-    this.code = product?.code;
     this.price = product?.price;
     this.status = product?.status;
     this.stock = product?.stock;

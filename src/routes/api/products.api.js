@@ -18,7 +18,7 @@ const isAdminMiddleware = (req, res, next) => {
 
 const router = Router();
 
-router.get('/', getProducts);
+router.get('/', passport.authenticate('jwt', { session: false }), getProducts);
 
 router.post(
   '/',

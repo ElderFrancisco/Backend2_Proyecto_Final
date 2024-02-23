@@ -1,10 +1,10 @@
-import { getProductsServices } from "../services/product.services.js";
-import { ProductService } from "../repository/index.js";
-import mongoose from "mongoose";
+import { getProductsServices } from '../services/product.services.js';
+import { ProductService } from '../repository/index.js';
+import mongoose from 'mongoose';
 
 function getPathUrl(req) {
   const currentPath = req.originalUrl;
-  const index = currentPath.indexOf("?");
+  const index = currentPath.indexOf('?');
   if (index !== -1) {
     const a = currentPath.substring(0, index);
     return a;
@@ -51,7 +51,7 @@ export const getProducts = async (req, res) => {
     return res.status(200).json(result);
   } catch (error) {
     req.logger.error(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 export const addProduct = async (req, res) => {
@@ -59,17 +59,18 @@ export const addProduct = async (req, res) => {
     if (!req.body.title || !req.body.price) {
       return res
         .status(400)
-        .json({ status: "error", error: "Not sent correct data" });
+        .json({ status: 'error', error: 'Not sent correct data' });
     }
-    if (req.user.user.rol == "premium") {
+    if (req.user.user.rol == 'premium') {
       req.body.owner = req.user.user.email;
     }
 
     const NewProduct = await ProductService.create(req.body);
-    return res.status(201).json({ status: "success", payload: NewProduct });
+
+    return res.status(201).json({ status: 'success', payload: NewProduct });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 
@@ -79,19 +80,19 @@ export const getProductById = async (req, res) => {
     if (!isValidMongoId(pid)) {
       return res
         .status(400)
-        .json({ status: "error", error: "Invalid Product ID" });
+        .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const productId = await ProductService.getByID(Id);
     if (productId == null) {
-      req.logger.info("Product not found");
+      req.logger.info('Product not found');
       return res
         .status(404)
-        .json({ status: "error", error: "Product Not Found" });
+        .json({ status: 'error', error: 'Product Not Found' });
     }
-    return res.status(200).json({ status: "success", payload: productId });
+    return res.status(200).json({ status: 'success', payload: productId });
   } catch (error) {
     req.logger.error(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 
@@ -101,34 +102,34 @@ export const updateProductById = async (req, res) => {
     if (!isValidMongoId(Id)) {
       return res
         .status(400)
-        .json({ status: "error", error: "Invalid Product ID" });
+        .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const body = req.body;
     const productToUpdate = await ProductService.getByID(Id);
     if (!productToUpdate) {
-      req.logger.info("Product not found");
+      req.logger.info('Product not found');
       return res
         .status(404)
-        .json({ status: "error", error: "Product Not Found" });
+        .json({ status: 'error', error: 'Product Not Found' });
     }
 
     //Si el user es owner del product o es admin
 
     if (
       productToUpdate.owner != req.user.user.email &&
-      req.user.user.rol != "admin"
+      req.user.user.rol != 'admin'
     ) {
       return res.status(403).json({
-        status: "error",
-        error: "This is not your product or you are not admin",
+        status: 'error',
+        error: 'This is not your product or you are not admin',
       });
     }
-    body["_id"] = Id;
+    body['_id'] = Id;
     const result = await ProductService.update(body);
-    return res.status(201).json({ status: "success", payload: result });
+    return res.status(201).json({ status: 'success', payload: result });
   } catch (error) {
     req.logger.error(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 export const deleteProductById = async (req, res) => {
@@ -137,17 +138,17 @@ export const deleteProductById = async (req, res) => {
     if (!isValidMongoId(Id)) {
       return res
         .status(400)
-        .json({ status: "error", error: "Invalid Product ID" });
+        .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const productToDelete = await ProductService.getByID(Id);
     //Si el user es owner del product o es admin, elimine
     if (
       productToDelete.owner != req.user.user.email &&
-      req.user.user.rol != "admin"
+      req.user.user.rol != 'admin'
     ) {
       return res.status(403).json({
-        status: "error",
-        error: "This is not your product or you are not admin",
+        status: 'error',
+        error: 'This is not your product or you are not admin',
       });
     }
 
@@ -155,15 +156,15 @@ export const deleteProductById = async (req, res) => {
     if (productDelete.deletedCount === 1) {
       return res
         .status(204)
-        .json({ status: "Success", message: "Product deleted successfully" });
+        .json({ status: 'Success', message: 'Product deleted successfully' });
     }
-    req.logger.info("Product not found");
+    req.logger.info('Product not found');
     return res
       .status(404)
-      .json({ status: "error", error: "Product Not Found" });
+      .json({ status: 'error', error: 'Product Not Found' });
   } catch (error) {
     req.logger.error(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 
@@ -173,15 +174,15 @@ export const renderGetProducts = async (req, res) => {
     const params = getQueryParams(req);
     const { user } = req.user;
     const productList = await getProductsServices(params, pathUrl);
-    if (productList.status == "error") {
-      return res.status(500).json({ status: "error" });
+    if (productList.status == 'error') {
+      return res.status(500).json({ status: 'error' });
     }
     return res
       .status(200)
-      .render("products", { products: productList, user: user });
+      .render('products', { products: productList, user: user });
   } catch (error) {
     req.logger.error(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 
@@ -193,20 +194,20 @@ export const renderGetProductById = async (req, res) => {
     if (!isValidMongoId(Id)) {
       return res
         .status(400)
-        .json({ status: "error", error: "Invalid Product ID" });
+        .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const product = await ProductService.getByID(Id);
     if (product == null) {
       return res
         .status(404)
-        .json({ status: "error", error: "product not found" });
+        .json({ status: 'error', error: 'product not found' });
     }
     return res
       .status(200)
-      .render("productView", { product: product, user: user });
+      .render('productView', { product: product, user: user });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ status: "error" });
+    return res.status(500).json({ status: 'error' });
   }
 };
 
