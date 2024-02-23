@@ -174,8 +174,60 @@ paths:
                     thumbnail:
                       - 'https://example.com/thumbnail.jpg'
                     owner: 'owner1@example.com'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Actualizar un solo producto
+      tags:
+        - Productos
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/pid'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductToPost'
+      responses:
+        '201':
+          description: actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Eliminar un solo producto
+      tags:
+        - Productos
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/pid'
+      responses:
+        '204':
+          description: Eliminado correctamente
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
@@ -341,7 +393,6 @@ components:
             example:
               status: error
               error: Not sent correct data
-
     NotFoundError:
       description: Error de no encontrado
       content:
@@ -356,7 +407,20 @@ components:
             example:
               status: error
               error: Not found
-
+    ForbiddenError:
+      description: Error de prohibido
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: This is not your product
   securitySchemes:
     cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
       type: apiKey

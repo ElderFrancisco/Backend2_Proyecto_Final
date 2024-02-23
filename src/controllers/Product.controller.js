@@ -120,8 +120,8 @@ export const updateProductById = async (req, res) => {
     //Si el user es owner del product o es admin
 
     if (
-      productToUpdate.owner != req.user.user.email &&
-      req.user.user.rol != 'admin'
+      productToUpdate.owner !== req.user.user.email &&
+      req.user.user.rol !== 'admin'
     ) {
       return res.status(403).json({
         status: 'error',
@@ -130,7 +130,7 @@ export const updateProductById = async (req, res) => {
     }
     body['_id'] = Id;
     const result = await ProductService.update(body);
-    return res.status(201).json({ status: 'success', payload: result });
+    return res.status(200).json({ status: 'success', payload: result });
   } catch (error) {
     req.logger.error(error);
     return res.status(500).json({ status: 'error' });
@@ -145,6 +145,10 @@ export const deleteProductById = async (req, res) => {
         .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const productToDelete = await ProductService.getByID(Id);
+    if (!productToDelete) {
+      req.logger.info('Product not found');
+      return res.status(404).json({ status: 'error', error: 'Not Found' });
+    }
     //Si el user es owner del product o es admin, elimine
     if (
       productToDelete.owner != req.user.user.email &&
