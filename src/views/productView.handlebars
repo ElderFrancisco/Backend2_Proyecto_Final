@@ -1,0 +1,67 @@
+<section id="productView">
+  <link rel="stylesheet" href="/css/productView.css">
+  <a class="back" href="/products/"><img src="/images/arrow.png" class="arrow" alt=""></a>
+  <div id="custom-alert" >
+  <!-- Aquí puedes personalizar el contenido de tu alerta -->
+  <p> Producto agregado al carrito.</p>
+  <img class="check" src="/images/check.webp" alt="">
+</div>
+
+<div id="waiting-alert" >
+  <!-- Aquí puedes personalizar el contenido de tu alerta -->
+  <p>Agregando al carrito...</p>
+
+</div>
+
+  <div class="card">
+      <h1 class="title">{{product.title}}</h1>
+      <p> <strong>Descripción:</strong> {{product.description}}</p>
+      <p ><strong>Precio:</strong> ${{product.price}}</p>
+      <p><strong>Codigo:</strong> {{product.code}}</p>
+      <p><strong>Stock:</strong> {{product.stock}}</p>
+      {{#if product.thumbnail}}
+        <img
+        class="img-product"
+          src="{{product.thumbnail}}"
+          alt="{{product.title}}"
+        />
+      {{else}}
+        <p>Imagen no disponible</p>
+      {{/if}}
+      <p><strong>Vendedor: </strong>{{product.owner}}</p>
+    </div>
+    <button class="button-add" 
+    type="submit" onclick="addProduct('{{product._id}}')">Agregar al carrito</button>
+ 
+
+</section>
+
+<script>
+
+  function addProduct(product) {
+     const customWaiting = document.getElementById('waiting-alert');
+        const customAlert = document.getElementById('custom-alert');
+        customAlert.style.display = 'none'; // Ocultar el alerta después de algunos segundos
+
+
+        customWaiting.style.display = 'flex'; 
+    const cart = ('{{user.cartId}}');
+      fetch(`/api/carts/${cart}/product/${product}`, {
+        method: 'POST'
+      })
+      .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la solicitud');
+        }
+        return response.json();
+    })
+       .then(data => {
+        customWaiting.style.display = 'none'; // Ocultar el alerta después de algunos segundos
+
+        customAlert.style.display = 'flex'; // Mostrar el alerta
+        setTimeout(() => {
+        customAlert.style.display = 'none'; // Ocultar el alerta después de algunos segundos
+        }, 3000);
+      })
+  }
+</script>

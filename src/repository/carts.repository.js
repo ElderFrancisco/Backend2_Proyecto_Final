@@ -37,16 +37,23 @@ export default class CartRepository {
   createTicket = async (cid) => {
     const user = await UserService.getByCartID(cid);
 
-    if (!user) return null;
+    if (!user) return { code: 1 };
 
     const cartUser = await this.dao.getByID(cid);
 
     const productsArray = cartUser.products;
     if (!productsArray.length) {
-      return null;
+      return {
+        code: 2,
+      };
     }
 
     const proceso = await procesarProductos(productsArray);
+
+    const successfulProducts = proceso.successful_products.map((p) => ({
+      product: p.product._id,
+      quantity: p.quantity,
+    }));
 
     if (proceso.failed_products.length > 0) {
       const productosFallidos = productsArray
@@ -61,81 +68,25 @@ export default class CartRepository {
     }
     await this.dao.update(cartUser);
 
-    const codigoAleatorio = Math.random().toString(36).substring(2, 8);
+    if (successfulProducts.length <= 0) {
+      return {
+        code: 3,
+      };
+    }
+
+    const codigoAleatorio = Math.random().toString(36).substring(2, 22);
     const ticket = {
       code: codigoAleatorio,
       amount: proceso.total_price,
       purchaser: user.email,
+      products: successfulProducts, // Agregar array de productos comprados
     };
-    return TicketService.create(ticket);
+
+    return await TicketService.create(ticket);
   };
-
-  //   export default class Cart {
-  //     get = async () => {
-  //       return cartModel.find();
-  //     };
-  //     create = async (data) => {
-  //       return cartModel.create(data);
-  //     };
-  //     getByEmail = async (email) => {
-  //       return cartModel
-  //         .findOne({ email: email })
-  //         .populate('products.product')
-  //         .lean();
-  //     };
-  //     update = async (data) => {
-  //       return cartModel.findOneAndUpdate({ _id: data._id }, data, { new: true });
-  //     };
-  //     paginate = async (params) => {
-  //       return cartModel.paginate(
-  //         {},
-  //         {
-  //           limit: params.limit,
-  //           page: params.page,
-  //           sort: params.sort,
-  //           lean: true,
-  //         },
-  //       );
-  //     };
-  //     deleteByID = async (id) => {
-  //       return cartModel.deleteOne({ _id: id });
-  //     };
-  //   }
-
-  //   addTicket = async (userID, ticketID) => {
-  //     const user = await this.dao.getByID(userID);
-
-  //     if (!user) {
-  //       throw new Error(`User not found`);
-  //     }
-  //     const ticket = await TicketService.getByID(ticketID);
-  //     if (!ticket) {
-  //       throw new Error(`Ticket not found`);
-  //     }
-
-  //     user.tickets.push(ticketID);
-
-  //     return this.dao.update(user);
-  //   };
-
-  //   reminder = async (userID) => {
-  //     const user = await this.dao.getByID(userID);
-
-  //     let html = `Mr ${user.name}, your tickets: <hr><ul>`;
-  //     for (let i = 0; i < user.tickets.length; i++) {
-  //       const ticketID = user.tickets[i];
-  //       const ticket = await TicketService.getByID(ticketID);
-
-  //       html = html.concat(`<li>${ticket.name}: ${ticket.description}<li>`);
-  //     }
-  //     html += `<ul>`;
-
-  //     const result = this.mail.send(user, 'Reminder Tickets', html);
-
-  //     return result;
-  //   };
 }
 async function procesarProductos(productsArray) {
+  const successfulProducts = [];
   const productsNotProcessed = [];
   let precioTotal = 0;
   for (const p of productsArray) {
@@ -144,21 +95,21 @@ async function procesarProductos(productsArray) {
         const newStock = p.product.stock - p.quantity;
         const body = { stock: newStock };
         body['_id'] = p.product._id;
-        console.log(body);
+
         await ProductService.update(body);
         const sumaTotalDeProducto = p.quantity * p.product.price;
         precioTotal += sumaTotalDeProducto;
+        successfulProducts.push(p); // Agregar productos comprados con éxito
       } else {
         productsNotProcessed.push(p.product._id);
       }
 
       // Tu lógica con el producto obtenido de la base de datos
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
   return {
     total_price: precioTotal,
+    successful_products: successfulProducts,
     failed_products: productsNotProcessed,
   };
 }
