@@ -66,7 +66,7 @@ class Server {
         info: {
           title: 'Francisco Elder Ecommerce API',
           description:
-            'Hola Bienvenido a la documentacion de mi api, para que puedas apreciar como funciona mi api, necesitas haber iniciado sesion, puedes ir al inicio e iniciar session o hacerlo desde la secion sessions de la api. Muchas gracias por visitar mi api, cualquier duda contacta a franciscoelder0@gmail.com',
+            'Hola Bienvenido a la documentacion de mi api, para que puedas apreciar como funciona mi api, necesitas haber iniciado sesion, puedes ir al inicio e iniciar Sesión o hacerlo desde la secion sessions de la api. Muchas gracias por visitar mi api, cualquier duda contacta a franciscoelder0@gmail.com',
           version: '1.0.0',
         },
       },

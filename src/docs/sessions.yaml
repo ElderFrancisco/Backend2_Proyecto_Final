@@ -1,84 +1,70 @@
 paths:
-  /api/sessions:
-    get:
-      summary: Obtener todos los productos
+  /api/session/register:
+    post:
+      summary: Registra usuario, ademas de crear y vincularle un cart
       tags:
-        - Productos
-      parameters:
-        # - $ref: '#/components/parameters/cookieJWT'
+        - Sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
       responses:
         '200':
+          description: Redirección a la vista login o authFailed
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/session/login:
+    post:
+      summary: Iniciar sesión, pone la cookieJWT
+      tags:
+        - Sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Redirección a la vista products o authFailed
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+#la respuesta es un redirect a login
 
 components:
   schemas:
-    Product:
+    UserRegister:
       type: object
       properties:
-        _id:
-          type: ObjectId
-        title:
+        first_name:
           type: string
-        description:
+        last_name:
           type: string
-        code:
+        email:
           type: string
-        price:
+        age:
           type: number
-        status:
-          type: boolean
-        stock:
-          type: number
-        category:
-          type: string
-        thumbnail:
-          type: array
-          items:
-            type: string
-        owner:
+        password:
           type: string
       example:
-        _id: ObjectId('652acba407d8295adeab421d')
-        title: Cepillo de Dientes
-        description: Cepillo de dientes color rosa
-        code: CEP203
-        price: 100
-        status: true
-        stock: 100
-        category: Higiene
-        thumbnail:
-          - 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ampri.es%2FCepillo-dental-desechable-PS-con-pasta-dentifrica-color-rosa-15-x-2-6-cm-Med-Comfort-comprar-cepillo-dental-desechable-de-poliestireno-para-viajes-y-uso-antes-del-tratamiento-dental-como-material-dental.%2F09590-P&psig=AOvVaw2mnyvwFDHgVH5Uz6xqKClm&ust=1708729908026000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOjm9oqJwIQDFQAAAAAdAAAAABAE'
-        owner: user@example.com
-    ProductToPost:
+        first_name: Api
+        last_name: Docs
+        email: apidocs@example.com
+        age: 30
+        password: 'api'
+    UserLogin:
       type: object
       properties:
-        title:
+        email:
           type: string
-        description:
+        password:
           type: string
-        price:
-          type: number
-        status:
-          type: boolean
-        code:
-          type: string
-        stock:
-          type: number
-        category:
-          type: string
-        thumbnail:
-          type: array
-          items:
-            type: string
       example:
-        title: Cepillo de Dientes
-        description: Cepillo de dientes color rosa
-        code: CEP203
-        price: 100
-        status: true
-        stock: 100
-        category: Higiene
-        thumbnail:
-          - 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ampri.es%2FCepillo-dental-desechable-PS-con-pasta-dentifrica-color-rosa-15-x-2-6-cm-Med-Comfort-comprar-cepillo-dental-desechable-de-poliestireno-para-viajes-y-uso-antes-del-tratamiento-dental-como-material-dental.%2F09590-P&psig=AOvVaw2mnyvwFDHgVH5Uz6xqKClm&ust=1708729908026000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOjm9oqJwIQDFQAAAAAdAAAAABAE'
+        email: apidocs@example.com
+        password: 'api'
   parameters:
     cookieJWT:
       name: cookieJWT
@@ -198,9 +184,3 @@ components:
             example:
               status: error
               error: This is not your product
-  securitySchemes:
-    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
-      type: apiKey
-      in: Set-Cookie
-      name: cookieJWT
-      description: Autenticación con cookie

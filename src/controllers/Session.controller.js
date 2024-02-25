@@ -21,7 +21,7 @@ export const login = async (req, res) => {
 };
 export const register = async (req, res) => {
   try {
-    return res.status(201).redirect('/login');
+    return res.status(302).redirect('/login');
   } catch (error) {
     req.logger.error(error);
     return res.status(500).json({ status: 'error' });

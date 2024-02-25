@@ -1,6 +1,6 @@
 import cartsApi from './carts.api.js';
 import productsApi from './products.api.js';
-import sessionsApi from './sessions.api.js';
+import sessionsApi from './session.api.js';
 import usersApi from './users.api.js';
 
 import { Router } from 'express';

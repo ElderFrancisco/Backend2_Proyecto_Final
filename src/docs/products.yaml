@@ -416,9 +416,3 @@ components:
             example:
               status: error
               error: This is not your product
-  securitySchemes:
-    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
-      type: apiKey
-      in: Set-Cookie
-      name: cookieJWT
-      description: Autenticación con cookie
