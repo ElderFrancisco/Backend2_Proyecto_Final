@@ -11,7 +11,7 @@ const generateToken = (user) => {
     cartId: user.cartId,
   };
   const token = jwt.sign({ user: filteredUser }, config.privatekey, {
-    expiresIn: '24h',
+    expiresIn: '1h',
   });
   return token;
 };

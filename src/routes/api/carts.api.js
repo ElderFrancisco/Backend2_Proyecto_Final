@@ -50,8 +50,8 @@ router.delete(
 
 router.put(
   '/:cid',
-  isUserMiddleware,
   passport.authenticate('jwt', { session: false }),
+  isUserMiddleware,
   updateManyProducts,
 );
 
@@ -61,7 +61,7 @@ router.delete(
   emptyCartById,
 );
 
-router.get(
+router.post(
   '/:cid/purchase',
   passport.authenticate('jwt', { session: false }),
   purchaseCartById,

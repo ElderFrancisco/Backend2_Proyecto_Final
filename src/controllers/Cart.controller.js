@@ -59,7 +59,7 @@ export const createNewCart = async (req, res) => {
     }
     return res.status(201).json(result);
   } catch (error) {
-    req.logger.error(`Error en createNewCart ${error}`);
+    req.logger.error(`Error en createNewCart:  ${error}`);
     return res.status(500).json({ status: 'error' });
   }
 };
@@ -149,12 +149,19 @@ export const deleteProductById = async (req, res) => {
         .status(400)
         .json({ status: 'error', error: 'Invalid Product ID' });
     }
-    const result = await CartServicesManager.deleteProductCart(cid, pid);
-    if (!result) {
+    const cart = await CartService.getByID(cid);
+    if (!cart) {
       req.logger.info('Cart not found');
       return res.status(404).json({ status: 'error', error: 'Cart Not Found' });
     }
-    return res.status(201).json({ status: 'Success', payload: result });
+    const result = await CartServicesManager.deleteProductCart(cid, pid);
+    if (!result) {
+      req.logger.info('Not product Found in cart');
+      return res
+        .status(404)
+        .json({ status: 'error', error: 'product Not Found in the cart' });
+    }
+    return res.status(200).json({ status: 'Success', payload: result });
   } catch (error) {
     req.logger.error(`Error en deleteProductById ${error}`);
     return res.status(500).json({ status: 'error' });
@@ -173,18 +180,25 @@ export const updateManyProducts = async (req, res) => {
       ? req.body.products
       : [];
     const productMap = new Map();
-    productsBody.forEach((product) => {
-      if (product.product && product.quantity) {
-        const { product: productId, quantity } = product;
-        if (productMap.has(productId)) {
-          // Si el producto ya está en el mapa, agregar la cantidad
-          productMap.set(productId, productMap.get(productId) + quantity);
-        } else {
-          // Si es la primera vez que se encuentra el producto, agregarlo al mapa
-          productMap.set(productId, quantity);
+    async function procesarProductos(productsBody, req, productMap) {
+      for (const product of productsBody) {
+        if (product.product && product.quantity) {
+          const ownerProduct = await ProductService.getByID(product.product);
+          if (req.user.user.email === ownerProduct.owner) {
+            return;
+          }
+          const { product: productId, quantity } = product;
+          if (productMap.has(productId)) {
+            // Si el producto ya está en el mapa, agregar la cantidad
+            productMap.set(productId, productMap.get(productId) + quantity);
+          } else {
+            // Si es la primera vez que se encuentra el producto, agregarlo al mapa
+            productMap.set(productId, quantity);
+          }
         }
       }
-    });
+    }
+    await procesarProductos(productsBody, req, productMap);
     const products = [...productMap].map(([product, quantity]) => ({
       product,
       quantity,
@@ -214,7 +228,7 @@ export const emptyCartById = async (req, res) => {
       req.logger.info('Cart not found');
       return res.status(404).json({ status: 'error', error: 'Cart Not Found' });
     }
-    return res.status(201).json({ status: 'Success', payload: result });
+    return res.status(200).json({ status: 'Success', payload: result });
   } catch (error) {
     req.logger.error(`Error en emptyCartById ${error}`);
     return res.status(500).json({ status: 'error' });
@@ -254,9 +268,10 @@ export const purchaseCartById = async (req, res) => {
 
     switch (result.code) {
       case 1:
-        return res
-          .status(404)
-          .json({ status: 'error', error: 'Cart Not Found' });
+        return res.status(404).json({
+          status: 'error',
+          error: 'Cart Not Found or does not have a user',
+        });
       case 2:
         return res.status(404).json({ status: 'error', error: 'Cart Empty' });
       case 3:

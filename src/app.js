@@ -65,7 +65,9 @@ class Server {
         openapi: '3.0.1',
         info: {
           title: 'Francisco Elder Ecommerce API',
-          description: 'Ecommerce API',
+          description:
+            'Hola Bienvenido a la documentacion de mi api, para que puedas apreciar como funciona mi api, necesitas haber iniciado sesion, puedes ir al inicio e iniciar session o hacerlo desde la secion sessions de la api. Muchas gracias por visitar mi api, cualquier duda contacta a franciscoelder0@gmail.com',
+          version: '1.0.0',
         },
       },
       apis: [`${__dirname}/docs/**/*.yaml`],

@@ -1,0 +1,517 @@
+paths:
+  /api/carts:
+    get:
+      summary: paginar y filtrar todos los carritos
+      tags:
+        - Carts
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: Carritos obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cart'
+                  totalPages:
+                    type: number
+                  prevPage:
+                    type: number
+                  nextPage:
+                    type: number
+                  page:
+                    type: number
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevLink:
+                    type: string
+                  nextLink:
+                    type: string
+                example:
+                  status: success
+                  payload:
+                    - _id: ObjectId('652acba407d8295adeab421d')
+                      products:
+                        - product: ObjectId('652acba407d8295adeab421d')
+                          quantity: 1
+                          _id: ObjectId('652acba407d8295adeab421e')
+                        - product: ObjectId('65c82ea6a1a519b22a03a6b1')
+                          quantity: 3
+                          _id: ObjectId('65c82ea6a1a519b22a03a6b2')
+                  totalPages: 2
+                  prevPage: null
+                  nextPage: 2
+                  page: 1
+                  hasPrevPage: false
+                  hasNextPage: true
+                  prevLink: null
+                  nextLink: /api/carts/?page=2
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Crear un nuevo carrito con o sin contenido dentro
+      tags:
+        - Carts
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartToPost'
+      responses:
+        '201':
+          description: Creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: '#/components/schemas/Cart'
+                example:
+                  status: success
+                  payload:
+                    _id: ObjectId('652acba407d8295adeab421d')
+                    products:
+                      - product: '1'
+                        quantity: 1
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/carts/{cid}:
+    get:
+      summary: Obtener un solo carrito
+      tags:
+        - Carts
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cid'
+      responses:
+        '200':
+          description: carrtio obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: '#/components/schemas/Cart'
+                example:
+                  status: success
+                  payload:
+                    _id: ObjectId('652acba407d8295adeab421d')
+                    products:
+                      - product:
+                          _id: ObjectId('652acba407d8295adeab421d')
+                          title: 'Cepillo de Dientes'
+                          description: 'Cepillo de dientes color rosa'
+                          code: 'CEP203'
+                          price: 100
+                          status: true
+                          stock: 100
+                          category: Higiene
+                          thumbnail:
+                            - 'https://example.com/thumbnail.jpg'
+                          owner: 'owner1@example.com'
+                        quantity: 1
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Actualizar varios productos de un solo carrito,  no deja agregar productos propios
+      tags:
+        - Carts
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cid'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartToPost'
+      responses:
+        '201':
+          description: actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+              example:
+                status: success
+                payload:
+                  _id: ObjectId('652acba407d8295adeab421d')
+                  products:
+                    - product: '1'
+                      quantity: 1
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: vaciar un solo carrito
+      tags:
+        - Carts
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cid'
+      responses:
+        '200':
+          description: vaciado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    products:
+                      type: array
+
+                example:
+                  status: success
+                  payload:
+                    _id: ObjectId('652acba407d8295adeab421d')
+                    products: []
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar un producto a un carrito, no deja agregar productos propios
+      tags:
+        - Carts
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cid'
+        - $ref: '#/components/parameters/pid'
+      responses:
+        '201':
+          description: agregado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: '#/components/schemas/Cart'
+                example:
+                  status: success
+                  payload:
+                    _id: ObjectId('652acba407d8295adeab421d')
+                    products:
+                      - product: '65d4bfcb800066a21afca5d6'
+                        quantity: 1
+                      - product: '65d3d1e06c0b43439d9add45'
+                        quantity: 3
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Eliminar un solo producto de un carrito
+      tags:
+        - Carts
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cid'
+        - $ref: '#/components/parameters/pid'
+      responses:
+        '200':
+          description: eliminado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: '#/components/schemas/Cart'
+                example:
+                  status: success
+                  payload:
+                    _id: ObjectId('652acba407d8295adeab421d')
+                    products:
+                      - product: '65d4bfcb800066a21afca5d6'
+                        quantity: 1
+                      - product: '65d3d1e06c0b43439d9add45'
+                        quantity: 3
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/carts/{cid}/purchase:
+    post:
+      summary: genera el ticket de un carrito, agrega los productos disponibles y los que no los deja en el cart
+      tags:
+        - Carts
+        - Tickets
+      parameters:
+        # - $ref: '#/components/parameters/cookieJWT'
+        - $ref: '#/components/parameters/cid'
+      responses:
+        '201':
+          description: ticket generado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    code:
+                      type: string
+                    purchase_datetime:
+                      type: string
+                    amount:
+                      type: number
+                    purchaser:
+                      type: string
+                    products:
+                      type: array
+                      items:
+                        - product: '65d4bfcb800066a21afca5d6'
+                          quantity: 1
+                        - product: '65d3d1e06c0b43439d9add45'
+                          quantity: 3
+                    _id:
+                      type: ObjectId
+
+                example:
+                  status: success
+                  payload:
+                    _id: ObjectId('652acba407d8295adeab421d')
+                    products:
+                      - product: '65d4bfcb800066a21afca5d6'
+                        quantity: 1
+                      - product: '65d3d1e06c0b43439d9add45'
+                        quantity: 3
+                    code: 123
+                    purchase_datetime: '2022-03-01T00:00:00.000Z'
+                    amount: 123
+                    purchaser: '123@test.com'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+        products:
+          type: array
+          items:
+            product:
+              type: ObjectId
+            quantity:
+              type: number
+      example:
+        _id: ObjectId('652acba407d8295adeab421d')
+        products:
+          - product: ObjectId('652acba407d8295adeab421d')
+            quantity: 1
+          - product: ObjectId('65c82ea6a1a519b22a03a6b1')
+            quantity: 3
+
+    CartToPost:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            product:
+              type: ObjectId
+            quantity:
+              type: number
+      example:
+        products:
+          - product: '65c82ea6a1a519b22a03a6b1'
+            quantity: 1
+          - product: '65d3d1e06c0b43439d9add45'
+            quantity: 3
+
+  parameters:
+    cookieJWT:
+      name: cookieJWT
+      in: header
+      required: true
+      description: Cookie que guarda la sesión en JWT
+      schema:
+        type: string
+        default: cookieJWT=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY1ZDdkYTAxNGYxZTU0NTc4NTFkOGZhMyIsImZpcnN0X25hbWUiOiJBcGkiLCJsYXN0X25hbWUiOiJUZXN0aW5nIiwiZW1haWwiOiJhcGlAZmFrZS1hcGkudGVzdCIsInJvbCI6InVzZXIiLCJjYXJ0SWQiOiI2NWQ3ZGEwMTRmMWU1NDU3ODUxZDhmYTEifSwiaWF0IjoxNzA4Njk4MzkzLCJleHAiOjE3MDg3ODQ3OTN9.x1M0lmqrXQUHwXIvAgvJ8I4qxym0K9f4nRNbPXat9Fk
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: number
+        default: 1
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: number
+        default: 10
+    query:
+      name: query
+      in: query
+      required: false
+      schema:
+        type: object
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: object
+    cid:
+      name: cid
+      in: path
+      required: true
+      description: ID del carrito
+      schema:
+        type: string
+        default: 65c914b8dfa4d75b82d2572e
+    pid:
+      name: pid
+      in: path
+      required: true
+      description: ID del producto
+      schema:
+        type: string
+        default: 65d7f1bc2acfcd06859d7f98
+  responses:
+    UnauthorizedError:
+      description: Error de autenticación
+      content:
+        application/json:
+          schema:
+            type: string
+            example: Unauthorized
+    ConflictError:
+      description: Error de conflicto
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: Already exists
+    InternalServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+            example:
+              status: error
+
+    BadRequestError:
+      description: Error de petición
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: Invalid Cart ID
+    NotFoundError:
+      description: Error de no encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: Cart Not found
+    ForbiddenError:
+      description: Error de prohibido
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string
+            example:
+              status: error
+              error: This is not your product
+  securitySchemes:
+    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: Set-Cookie
+      name: cookieJWT
+      description: Autenticación con cookie

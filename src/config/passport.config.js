@@ -1,29 +1,29 @@
-import passport from "passport";
-import local from "passport-local";
-import GitHubStrategy from "passport-github2";
-import HashManager from "../util/hash.js";
-import passportJWT from "passport-jwt";
-import { generateToken } from "../util/jwt.js";
-import config from "./config.js";
+import passport from 'passport';
+import local from 'passport-local';
+import GitHubStrategy from 'passport-github2';
+import HashManager from '../util/hash.js';
+import passportJWT from 'passport-jwt';
+import { generateToken } from '../util/jwt.js';
+import config from './config.js';
 
-import { CartService, UserService } from "../repository/index.js";
+import { CartService, UserService } from '../repository/index.js';
 
 const JWTStrategy = passportJWT.Strategy;
 
 const HashController = new HashManager();
 
 const extractCookie = (req) => {
-  return req.cookies ? req.cookies["cookieJWT"] : null;
+  return req.cookies ? req.cookies['cookieJWT'] : null;
 };
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
   passport.use(
-    "register",
+    'register',
     new LocalStrategy(
       {
         passReqToCallback: true,
-        usernameField: "email",
+        usernameField: 'email',
       },
       async (req, username, password, done) => {
         const { first_name, last_name, email, age } = req.body;
@@ -46,25 +46,25 @@ const initializePassport = () => {
           const result = await UserService.create(newUser);
           return done(null, result);
         } catch (error) {
-          req.logger.error("Error on passport register: ", error);
+          req.logger.error('Error on passport register: ', error);
           return done(null, false);
         }
-      }
-    )
+      },
+    ),
   );
 
   passport.use(
-    "login",
+    'login',
     new LocalStrategy(
       {
-        usernameField: "email",
+        usernameField: 'email',
       },
 
       async (username, password, done) => {
         try {
           const user = await UserService.getByEmail(username);
           if (!user) {
-            req.logger.debug("user doesnt exist");
+            req.logger.debug('user doesnt exist');
             return done(null, false);
           }
           if (HashController.isValidPassword(user, password) == false)
@@ -75,14 +75,14 @@ const initializePassport = () => {
           return done(null, user);
         } catch (err) {
           console.log(err);
-          req.logger.error("Error on passport login: ", err);
+          req.logger.error('Error on passport login: ', err);
           return done(null, false);
         }
-      }
-    )
+      },
+    ),
   );
   passport.use(
-    "github",
+    'github',
     new GitHubStrategy(
       {
         clientID: config.clientID,
@@ -102,24 +102,24 @@ const initializePassport = () => {
 
           const newUser = {
             first_name: profile._json.name,
-            last_name: "",
+            last_name: '',
             email: profile._json.email,
             age: profile._json.age,
-            password: HashController.createHash(""),
+            password: HashController.createHash(''),
             cartId: cartId._id,
           };
           const result = await UserService.create(newUser);
 
           return done(null, result);
         } catch (error) {
-          req.logger.error("error al iniciar sesion con gituhb" + error);
+          return done(null, false);
         }
-      }
-    )
+      },
+    ),
   );
 
   passport.use(
-    "jwt",
+    'jwt',
     new JWTStrategy(
       {
         jwtFromRequest: passportJWT.ExtractJwt.fromExtractors([extractCookie]),
@@ -132,8 +132,8 @@ const initializePassport = () => {
           req.logger.error(error);
           return done(null, false);
         }
-      }
-    )
+      },
+    ),
   );
 
   passport.serializeUser((user, done) => {
