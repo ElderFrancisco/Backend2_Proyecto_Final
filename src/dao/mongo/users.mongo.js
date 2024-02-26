@@ -11,6 +11,6 @@ export default class User {
     return UserModel.findOne(query);
   };
   update = async (data) => {
-    return UserModel.updateOne({ _id: data._id }, data);
+    return UserModel.updateOne({ _id: data._id }, data, { new: true });
   };
 }

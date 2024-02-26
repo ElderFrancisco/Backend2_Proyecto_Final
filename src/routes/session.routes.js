@@ -14,6 +14,14 @@ import {
   premium,
 } from '../controllers/Session.controller.js';
 
+const adminOrPremiumUserMiddleware = (req, res, next) => {
+  const user = req.user;
+  if (user.rol == 'premium' || user.rol == 'admin') {
+    return res.status(400).redirect('/current');
+  }
+  next();
+};
+
 const router = Router();
 router.get('/', authToHome, RenderHome);
 
@@ -34,6 +42,7 @@ router.get('/404', Render404);
 router.get(
   '/premium',
   passport.authenticate('jwt', { session: false }),
+  adminOrPremiumUserMiddleware,
   premium,
 );
 router.get('/cambios', accessPublicWithoutAuth, RenderCambios);

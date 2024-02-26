@@ -253,9 +253,15 @@ export const Render404 = async (req, res) => {
 };
 export const premium = async (req, res) => {
   try {
-    return res.render('premium', { user: req.user });
+    const user = await UserService.getByID(req.user._id);
+    let infoDocs = null;
+    if (user.documents.length >= 3) {
+      infoDocs = 'ready';
+    }
+    return res.render('premium', { user: req.user, infoDocs });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error('Error en premium: ', error);
+    return res.status(500).json({ status: 'error' });
   }
 };
 

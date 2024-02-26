@@ -1,9 +1,33 @@
 <section id="premium">
     <div>
         <h1>Quieres ser premium</h1>
-        <p> al convertirte en usuario premium, Podras crear tus propios productos</p>
-      <a href="/api/users/premium/{{user._id}}">Quiero ser Premium</a>
+        <p> al convertirte en usuario premium, Podras crear tus propios productos y acceder a nuestro chat</p>
     </div>
+    {{#if infoDocs }}
+    <p>Ya cumples los requisitos para ser premium</p>
+     <a href="/api/users/premium/{{user._id}}">Convierteme</a>
+    
+    {{else}}
+    <div>
+        <p>Debes enviar los siguientes datos para poder ser premium:</p>
+        <ul>
+            <li>Identificación</li>
+            <li>Comprobante de domicilio</li>
+            <li>Comprobante de estado de cuenta</li>
+        </ul>
+    </div>
+    <form id="uploadForm" enctype="multipart/form-data" action="/api/users/premium/{{user._id}}/documents" method="post" class="form">
+        <input type="hidden" name="type" value="profile">
+        <label for="type">Identificación</label>
+        <input type="file" name="file" />
+        <label for="type">Comprobante de domicilio</label>
+        <input type="file" name="file" />
+        <label for="type">Comprobante de estado de cuenta</label>
+        <input type="file" name="file" />
+        <button type="submit">Upload</button>
+    </form>
+    {{/if}}
+
 </section>
 <style>
     #premium {
