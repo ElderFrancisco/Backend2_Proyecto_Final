@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
     {
       name: String,
       path: String,
+      _id: false,
     },
   ],
 });
