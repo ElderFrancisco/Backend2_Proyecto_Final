@@ -1,3 +1,11 @@
+preentrega4:
+ -cambiar model user para que tenga name: String(nombre del documento) reference: String (link al documento)
+ - agregar campo last connection a user, el cual se debe modificar cada login y logout
+ - endpoint [POST]/api/users/:uid/documents 
+ - el middleware multer debe guardar en profile y products segun 
+ - modificar endpoint para solo ser premium si se sube identificacion, comprobante domicilio y comprobante de estado de cuenta
+
+
 
 
 extras:

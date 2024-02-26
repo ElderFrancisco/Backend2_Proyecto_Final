@@ -1,6 +1,7 @@
 import {
   renderGetProducts,
   renderGetProductById,
+  renderAddProduct,
 } from '../controllers/Product.controller.js';
 
 import { Router } from 'express';
@@ -15,6 +16,14 @@ router.get(
   }),
   renderGetProducts,
 );
+router.get(
+  '/file',
+  passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/login',
+  }),
+  renderAddProduct,
+);
 
 router.get(
   '/:pid',
@@ -24,4 +33,5 @@ router.get(
   }),
   renderGetProductById,
 );
+
 export default router;

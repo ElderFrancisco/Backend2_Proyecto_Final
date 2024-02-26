@@ -8,5 +8,6 @@ export default class UserCreateDTO {
     this.password = user?.password;
     this.rol = user?.rol;
     this.cartId = user?.cartId;
+    this.documents = user?.documents;
   }
 }

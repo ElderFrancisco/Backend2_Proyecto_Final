@@ -3,7 +3,7 @@ import http from 'http';
 import setupRoutes from './routes/index.js';
 import bodyParser from 'body-parser';
 import exphbs from 'express-handlebars';
-import utilSocket from './util/socket.js';
+import utilSocket from './middlewares/socket.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
@@ -13,7 +13,7 @@ import config from './config/config.js';
 import compression from 'express-compression';
 import errorHandler from './middlewares/error.js';
 import __dirname from './utils.js';
-import { addLogger } from './util/winston.js';
+import { addLogger } from './middlewares/winston.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -27,7 +27,6 @@ class Server {
       this.middlewares();
       this.routes();
       Server.instance = this;
-      this.documentation();
     }
     return Server.instance;
   }
@@ -86,20 +85,6 @@ class Server {
 
   routes() {
     this.app.use('/', setupRoutes);
-  }
-  documentation() {
-    // const swaggerOptions = {
-    //   definition: {
-    //     openapi: "3.0.1",
-    //     info: {
-    //       title: "Francisco Elder Ecommerce API",
-    //       description: "Ecommerce API",
-    //     },
-    //   },
-    //   apis: [`${__dirname}/../docs/**/*.yaml`],
-    // };
-    // const specs = swaggerJSDoc(swaggerOptions);
-    // this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
   }
 
   listen() {

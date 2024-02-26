@@ -219,6 +219,16 @@ export const renderGetProductById = async (req, res) => {
   }
 };
 
+export const renderAddProduct = async (req, res) => {
+  try {
+    const { user } = req.user;
+    return res.status(200).render('file', { user: user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: 'error' });
+  }
+};
+
 function isValidMongoId(id) {
   return mongoose.Types.ObjectId.isValid(id);
 }

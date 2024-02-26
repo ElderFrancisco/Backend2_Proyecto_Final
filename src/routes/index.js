@@ -1,9 +1,9 @@
-import webSocketRoute from './websocket.route.js';
-import productsRoute from './products.route.js';
-import cartsRoute from './cart.route.js';
-import sessionRoute from './session.route.js';
-import mockingRoute from './mocking.route.js';
-import loggerRoute from './logger.route.js';
+import webSocketRoute from './websocket.routes.js';
+import productsRoute from './products.routes.js';
+import cartsRoute from './cart.routes.js';
+import sessionRoute from './session.routes.js';
+import mockingRoute from './mocking.routes.js';
+import loggerRoute from './logger.routes.js';
 
 import api from './api/index.js';
 

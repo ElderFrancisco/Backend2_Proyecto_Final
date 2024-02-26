@@ -1,0 +1,25 @@
+<section id='file'>
+  <form id='uploadForm' enctype='multipart/form-data' action='/api/users/premium/{{user._id}}/documents' method='post' class='form'>
+    <label for='type'>Seleccione el tipo:</label>
+     
+     <select id='type' name='type'>
+      <option value='product'>Producto</option>
+      <option value='profile'>Perfil</option>
+    </select>
+    
+    <input type='file' name='file' />
+   
+    <button type='submit'>Upload</button>
+  </form>
+</section>
+<script>
+  document.getElementById('uploadForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe
+    
+    // Aquí puedes agregar cualquier lógica adicional que necesites antes de enviar el formulario manualmente con JavaScript
+    // Por ejemplo, puedes agregar validaciones de entrada o mostrar un mensaje de confirmación
+    
+    // Luego, puedes enviar el formulario manualmente
+    this.submit();
+  });
+</script>
