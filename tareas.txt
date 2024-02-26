@@ -1,0 +1,14 @@
+
+
+extras:
+ -vista carrito en front, 
+ -agregar carrito✅
+ -barrita de busqueda
+ -✅nav con hazte premium
+ -vista de current ✅
+- explicar que tiene el proyecto en el home,
+-cuando se borra un product borrar de todos los productos de ese mismo product en los carts
+-al agregar producto, que salga cartel diciendo no puedes agregar tu propio product
+- quitar css de handlebars
+
+
