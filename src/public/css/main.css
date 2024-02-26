@@ -21,6 +21,7 @@ body {
 
 .li-header {
   margin: 0 15px;
+  position: relative; /* Añadido para posicionar el dropdown */
 }
 
 .li-header a {
@@ -30,6 +31,46 @@ body {
   font-size: 16px;
   transition: color 0.3s ease-in-out;
 }
+
 .li-header a:hover {
   color: #ecf0f1;
+}
+
+/* Estilos para el dropdown */
+.dropdown-content {
+  display: none;
+  align-items: center;
+  position: absolute;
+  background-color: azure;
+  min-width: 120px;
+  z-index: 1;
+  top: 100%;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  text-decoration: none;
+}
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.li-header:hover .dropdown-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.dropdown-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
