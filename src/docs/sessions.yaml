@@ -31,8 +31,68 @@ paths:
           description: Redirección a la vista products o authFailed
         '500':
           $ref: '#/components/responses/InternalServerError'
-
-#la respuesta es un redirect a login
+  /api/session/logout:
+    get:
+      summary: Cierre de sesión, elimina la cookieJWT
+      tags:
+        - Sesión
+      responses:
+        '200':
+          description: Redirección a la vista login o home
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/session/current:
+    get:
+      summary: Obtiene el usuario actual sin mostrar informacion sensible
+      tags:
+        - Sesión
+      responses:
+        '200':
+          description: muestra el contenido de la cookie
+          #devuelve un json con los datos del usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          email:
+                            type: string
+                          rol:
+                            type: string
+                          cartId:
+                            type: string
+                        iat:
+                          type: number
+                        exp:
+                          type: number
+                example:
+                  status: 'success'
+                  payload:
+                    user:
+                      _id: '652acba407d8295adeab421d'
+                      first_name: 'Api'
+                      last_name: 'Docs'
+                      email: 'apidocs@example.com'
+                      rol: 'user'
+                      cartId: '652acba407d8295adeab421d'
+                    iat: 1661296147
+                    exp: 1661382547
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 components:
   schemas:
