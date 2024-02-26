@@ -4,7 +4,7 @@ import __dirname from '../utils.js';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    let uploadPath = 'src/public/documents'; // Por defecto, sube a la carpeta 'documents'
+    let uploadPath = 'src/public/documents';
     if (req.body.type === 'product') {
       uploadPath = 'src/public/documents/products';
     } else if (req.body.type === 'profile') {

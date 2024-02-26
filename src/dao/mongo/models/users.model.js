@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
     ref: 'carts',
     required: true,
   },
-  //documents sera un array con name y path
   documents: [
     {
       name: String,

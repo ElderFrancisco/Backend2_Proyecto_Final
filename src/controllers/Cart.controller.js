@@ -35,10 +35,8 @@ export const createNewCart = async (req, res) => {
       if (product.product && product.quantity) {
         const { product: productId, quantity } = product;
         if (productMap.has(productId)) {
-          // Si el producto ya está en el mapa, agregar la cantidad
           productMap.set(productId, productMap.get(productId) + quantity);
         } else {
-          // Si es la primera vez que se encuentra el producto, agregarlo al mapa
           productMap.set(productId, quantity);
         }
       }
@@ -189,10 +187,8 @@ export const updateManyProducts = async (req, res) => {
           }
           const { product: productId, quantity } = product;
           if (productMap.has(productId)) {
-            // Si el producto ya está en el mapa, agregar la cantidad
             productMap.set(productId, productMap.get(productId) + quantity);
           } else {
-            // Si es la primera vez que se encuentra el producto, agregarlo al mapa
             productMap.set(productId, quantity);
           }
         }

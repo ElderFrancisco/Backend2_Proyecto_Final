@@ -1,22 +1,16 @@
-preentrega4:
- -✅cambiar model user para que tenga name: String(nombre del documento) reference: String (link al documento)
- -✅ agregar campo last connection a user, el cual se debe modificar cada login y logout
- - ✅endpoint [POST]/api/users/:uid/documents 
- - ✅el middleware multer debe guardar en profile y products segun 
- - ✅modificar endpoint para solo ser premium si se sube identificacion, comprobante domicilio y comprobante de estado de cuenta
-
+tareas:
+ - vista add-product y admin-products
 
 
 
 extras:
- -vista carrito en front, 
- -agregar carrito✅
+
  -barrita de busqueda
- -✅nav con hazte premium
- -vista de current ✅
+
 - explicar que tiene el proyecto en el home,
 -cuando se borra un product borrar de todos los productos de ese mismo product en los carts
 -al agregar producto, que salga cartel diciendo no puedes agregar tu propio product
 - quitar css de handlebars
+
 
 

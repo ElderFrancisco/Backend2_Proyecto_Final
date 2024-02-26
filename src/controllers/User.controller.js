@@ -21,7 +21,6 @@ export const premiumById = async (req, res) => {
 
     await UserService.premium(user);
     res.clearCookie('cookieJWT').status(200);
-    // hacer render de vista premium,  ver beneficios y volver a iniciar session
     return res.clearCookie('cookieJWT').status(200).redirect('/cambios');
   } catch (error) {
     req.logger.error(`Error en premiumById: ${error}`);
