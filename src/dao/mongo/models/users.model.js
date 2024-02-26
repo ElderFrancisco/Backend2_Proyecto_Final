@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema({
       _id: false,
     },
   ],
+  last_connection: {
+    type: Date,
+  },
 });
 
 const userModel = mongoose.model(userCollection, userSchema);

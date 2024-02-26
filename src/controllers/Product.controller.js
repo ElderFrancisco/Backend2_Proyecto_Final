@@ -61,8 +61,8 @@ export const addProduct = async (req, res) => {
         .status(400)
         .json({ status: 'error', error: 'Not sent correct data' });
     }
-    if (req.user.user.rol == 'premium') {
-      req.body.owner = req.user.user.email;
+    if (req.user.rol == 'premium') {
+      req.body.owner = req.user.email;
     }
 
     const productCode = await ProductService.getByQuery({
@@ -76,7 +76,7 @@ export const addProduct = async (req, res) => {
 
     return res.status(201).json({ status: 'success', payload: NewProduct });
   } catch (error) {
-    console.log(error);
+    req.logger.error('error addProduct :', error);
     return res.status(500).json({ status: 'error' });
   }
 };
@@ -119,10 +119,7 @@ export const updateProductById = async (req, res) => {
 
     //Si el user es owner del product o es admin
 
-    if (
-      productToUpdate.owner !== req.user.user.email &&
-      req.user.user.rol !== 'admin'
-    ) {
+    if (productToUpdate.owner !== req.user.email && req.user.rol !== 'admin') {
       return res.status(403).json({
         status: 'error',
         error: 'This is not your product or you are not admin',
@@ -150,10 +147,7 @@ export const deleteProductById = async (req, res) => {
       return res.status(404).json({ status: 'error', error: 'Not Found' });
     }
     //Si el user es owner del product o es admin, elimine
-    if (
-      productToDelete.owner != req.user.user.email &&
-      req.user.user.rol != 'admin'
-    ) {
+    if (productToDelete.owner != req.user.email && req.user.rol != 'admin') {
       return res.status(403).json({
         status: 'error',
         error: 'This is not your product or you are not admin',
@@ -180,7 +174,7 @@ export const renderGetProducts = async (req, res) => {
   try {
     const pathUrl = getPathUrl(req);
     const params = getQueryParams(req);
-    const { user } = req.user;
+    const user = req.user;
     const productList = await getProductsServices(params, pathUrl);
     if (productList.status == 'error') {
       return res.status(500).json({ status: 'error' });
@@ -196,7 +190,7 @@ export const renderGetProducts = async (req, res) => {
 
 export const renderGetProductById = async (req, res) => {
   try {
-    const { user } = req.user;
+    const user = req.user;
 
     const Id = req.params.pid;
     if (!isValidMongoId(Id)) {
@@ -214,17 +208,17 @@ export const renderGetProductById = async (req, res) => {
       .status(200)
       .render('productView', { product: product, user: user });
   } catch (error) {
-    console.log(error);
+    req.logger.error('renderGetProductById: ' + error);
     return res.status(500).json({ status: 'error' });
   }
 };
 
 export const renderAddProduct = async (req, res) => {
   try {
-    const { user } = req.user;
+    const user = req.user;
     return res.status(200).render('file', { user: user });
   } catch (error) {
-    console.log(error);
+    req.logger.error('renderAddProduct: ' + error);
     return res.status(500).json({ status: 'error' });
   }
 };

@@ -9,7 +9,7 @@ import {
 } from '../../controllers/Product.controller.js';
 
 const isAdminMiddleware = (req, res, next) => {
-  if (req.user.user.rol === 'admin' || req.user.user.rol === 'premium') {
+  if (req.user.rol === 'admin' || req.user.rol === 'premium') {
     next();
   } else {
     res.status(403).json({ error: 'Acceso no autorizado' });

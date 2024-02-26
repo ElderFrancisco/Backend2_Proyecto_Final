@@ -18,15 +18,13 @@ export const premiumById = async (req, res) => {
     // hacer render de vista premium,  ver beneficios y volver a iniciar session
     return res.clearCookie('cookieJWT').status(200).redirect('/cambios');
   } catch (error) {
-    console.log(error);
+    req.logger.error(`Error en premiumById: ${error}`);
     return res.status(500).json({ status: 'error' });
   }
 };
 
 export const file = async (req, res) => {
   try {
-    console.log(req.body.type);
-    console.log('entro a la route');
     if (!req.file) {
       return res.status(400).json({ status: 'error', error: 'File not found' });
     }

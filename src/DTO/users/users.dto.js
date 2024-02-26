@@ -8,5 +8,6 @@ export default class UserCreateDTO {
     this.rol = user?.rol || 'user';
     this.cartId = user?.cartId || '';
     this.documents = user?.documents || [];
+    this.last_connection = user?.last_connection || Date.now();
   }
 }

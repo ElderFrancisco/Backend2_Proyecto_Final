@@ -10,6 +10,8 @@ export const login = async (req, res) => {
         .status(400)
         .send({ status: 'error', error: 'credenciales invalidas' });
     }
+    UserService.connectionUpdate(req.user);
+
     return res
       .status(201)
       .cookie('cookieJWT', req.user.token)
@@ -29,6 +31,7 @@ export const register = async (req, res) => {
 };
 export const githubcallback = async (req, res) => {
   try {
+    UserService.connectionUpdate(req.user);
     return res.cookie('cookieJWT', req.user.token).redirect('/products');
   } catch (error) {
     req.logger.error(error);
@@ -38,7 +41,9 @@ export const githubcallback = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     if (req.cookies['cookieJWT']) {
-      // Elimina la cookie
+      UserService.getByID(req.user._id).then((user) => {
+        UserService.connectionUpdate(user);
+      });
       res.clearCookie('cookieJWT').status(200).redirect('/');
     } else {
       res.status(400).redirect('/login');
@@ -93,7 +98,7 @@ export const forgotPassword = async (req, res) => {
         'El enlace de restablecimiento de contraseña ha sido enviado a tu correo',
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error('error forgotPassword :', error);
     return res.status(500).json({ status: 'error' });
   }
 };
@@ -130,7 +135,6 @@ export const restorePassword = async (req, res) => {
         .json({ status: 'error', error: 'Reset not found' });
     }
 
-    console.log(Reset.dateEnd, Date.now());
     if (Reset.dateEnd < Date.now()) {
       return res.status(404).json({ status: 'error', error: 'Code expired' });
     }
@@ -155,7 +159,7 @@ export const restorePassword = async (req, res) => {
 
     return res.status(201).clearCookie('cookieJWT').render('cambios');
   } catch (error) {
-    console.log(error);
+    req.logger.error('error restorePassword :', error);
     return res.status(500).json({ status: 'error' });
   }
 };
@@ -190,7 +194,7 @@ export const RenderforgotPassword = async (req, res) => {
 
 export const RenderCurrent = async (req, res) => {
   try {
-    const user = req.user.user;
+    const user = req.user;
     let infoRol = null;
     if (user.rol == 'user') {
       infoRol = 'premium';
@@ -249,7 +253,7 @@ export const Render404 = async (req, res) => {
 };
 export const premium = async (req, res) => {
   try {
-    return res.render('premium', { user: req.user.user });
+    return res.render('premium', { user: req.user });
   } catch (error) {
     req.logger.error(error);
   }

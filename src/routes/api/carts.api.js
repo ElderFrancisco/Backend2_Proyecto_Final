@@ -12,7 +12,7 @@ import {
 import passport from 'passport';
 
 const isUserMiddleware = (req, res, next) => {
-  if (req.user.user.rol !== 'admin') {
+  if (req.user.rol !== 'admin') {
     next();
   } else {
     res.status(403).json({ error: 'Acceso no autorizado' });

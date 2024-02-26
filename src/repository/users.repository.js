@@ -28,4 +28,9 @@ export default class UserRepository {
     dataToInsert.rol = 'premium';
     return this.dao.update(dataToInsert);
   };
+  connectionUpdate = async (data) => {
+    data.last_connection = Date.now();
+    const dataToInsert = new UserUpdateDTO(data);
+    return this.dao.update(dataToInsert);
+  };
 }

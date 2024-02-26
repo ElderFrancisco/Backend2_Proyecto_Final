@@ -118,7 +118,7 @@ export const updateOneCartByIdProduct = async (req, res) => {
         .json({ status: 'error', error: 'Product Not Found' });
     }
 
-    if (req.user.user.email === product.owner) {
+    if (req.user.email === product.owner) {
       return res
         .status(401)
         .json({ status: 'error', error: 'Cant add yourself product' });
@@ -184,7 +184,7 @@ export const updateManyProducts = async (req, res) => {
       for (const product of productsBody) {
         if (product.product && product.quantity) {
           const ownerProduct = await ProductService.getByID(product.product);
-          if (req.user.user.email === ownerProduct.owner) {
+          if (req.user.email === ownerProduct.owner) {
             return;
           }
           const { product: productId, quantity } = product;
@@ -248,9 +248,7 @@ export const renderGetCartById = async (req, res) => {
     if (!result) {
       return res.status(404).json({ status: 'error', error: 'Cart Not Found' });
     }
-    return res
-      .status(200)
-      .render('cartView', { cart: result, user: req.user.user });
+    return res.status(200).render('cartView', { cart: result, user: req.user });
   } catch (error) {
     req.logger.error(`Error en renderGetCartById ${error}`);
     return res.status(500).json({ status: 'error' });

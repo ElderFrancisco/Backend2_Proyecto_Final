@@ -2,17 +2,20 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
 
 const generateToken = (user) => {
-  const filteredUser = {
-    _id: user._id,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    email: user.email,
-    rol: user.rol,
-    cartId: user.cartId,
-  };
-  const token = jwt.sign({ user: filteredUser }, config.privatekey, {
-    expiresIn: '1h',
-  });
+  const token = jwt.sign(
+    {
+      _id: user._id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      rol: user.rol,
+      cartId: user.cartId,
+    },
+    config.privatekey,
+    {
+      expiresIn: '1h',
+    },
+  );
   return token;
 };
 

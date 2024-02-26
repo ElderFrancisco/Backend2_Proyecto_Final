@@ -1,4 +1,4 @@
-export default class UserCreateDTO {
+export default class UserUpdateDTO {
   constructor(user) {
     this._id = user?.id;
     this.first_name = user?.first_name;
@@ -9,5 +9,6 @@ export default class UserCreateDTO {
     this.rol = user?.rol;
     this.cartId = user?.cartId;
     this.documents = user?.documents;
+    this.last_connection = user?.last_connection || Date.now();
   }
 }

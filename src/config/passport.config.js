@@ -74,7 +74,6 @@ const initializePassport = () => {
           user.token = token;
           return done(null, user);
         } catch (err) {
-          console.log(err);
           req.logger.error('Error on passport login: ', err);
           return done(null, false);
         }
