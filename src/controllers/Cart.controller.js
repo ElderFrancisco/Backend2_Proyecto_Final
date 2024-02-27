@@ -1,7 +1,9 @@
 import CartServices from '../services/cart.services.js';
 import { CartService, ProductService } from '../repository/index.js';
 import mongoose from 'mongoose';
+import PaymentService from '../services/payment.service.js';
 
+const Stripe = new PaymentService();
 const CartServicesManager = new CartServices();
 
 function getQueryParams(req) {
@@ -258,9 +260,9 @@ export const purchaseCartById = async (req, res) => {
         .status(400)
         .json({ status: 'error', error: 'Invalid Cart ID' });
     }
-    const result = await CartService.createTicket(cid);
+    const ticket = await CartService.createTicket(cid);
 
-    switch (result.code) {
+    switch (ticket.code) {
       case 1:
         return res.status(404).json({
           status: 'error',
@@ -273,10 +275,20 @@ export const purchaseCartById = async (req, res) => {
           .status(404)
           .json({ status: 'error', error: 'products out of stock' });
       default:
-        return res.status(201).json({ status: 'Success', payload: result });
+        break;
     }
+    console.log(ticket.amount);
+    const data = {
+      amount: ticket.amount,
+      currency: 'USD',
+      payment_method_types: ['card'],
+    };
+    const result = await Stripe.createPaymentIntent(data);
+    console.log(result);
+
+    return res.status(201).json({ status: 'Success', payload: result });
   } catch (error) {
-    req.logger.error(`Error en purchaseCartById ${error}`);
+    req.logger.error(`Error en purchaseCartById: ${error}`);
     return res.status(500).json({ status: 'error' });
   }
 };

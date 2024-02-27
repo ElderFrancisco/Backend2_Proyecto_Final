@@ -4,12 +4,13 @@ import cartsRoute from './cart.routes.js';
 import sessionRoute from './session.routes.js';
 import mockingRoute from './mocking.routes.js';
 import loggerRoute from './logger.routes.js';
+import purchaseRoute from './purchase.routes.js';
 
 import api from './api/index.js';
 
 import { Router } from 'express';
 import { notFound } from '../controllers/NotFound.controller.js';
-import { accessPublicWithoutAuth, authToHome } from '../util/jwt.js';
+import { authToHome } from '../util/jwt.js';
 const router = Router();
 
 router.use('/chat', webSocketRoute);
@@ -18,6 +19,7 @@ router.use('/products', productsRoute);
 router.use('/', sessionRoute);
 router.use('/loggerTest', loggerRoute);
 router.use('/mockingproducts', mockingRoute);
+router.use('/purchase', purchaseRoute);
 
 router.use('/api', api);
 

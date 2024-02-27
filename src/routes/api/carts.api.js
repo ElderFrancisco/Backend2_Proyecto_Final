@@ -61,7 +61,7 @@ router.delete(
   emptyCartById,
 );
 
-router.post(
+router.get(
   '/:cid/purchase',
   passport.authenticate('jwt', { session: false }),
   purchaseCartById,

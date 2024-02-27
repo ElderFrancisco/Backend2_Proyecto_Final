@@ -1,0 +1,28 @@
+<section id="purchase">
+   <form id="payment-form">
+    <!-- Elemento de tarjeta de crédito de Stripe -->
+    <div id="card-element">
+      <!-- Estilos y elementos de UI para la tarjeta de crédito -->
+    </div>
+    <button id="submit-button">Pagar</button>
+  </form>
+
+  <script>
+
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      stripe.confirmCardPayment('pi_3OoAPYIfv2Ud9ONc17kzum1h_secret_Tq1PFKvqX5WdtGBExsWfAv3mn', {
+        payment_method: {
+          card: cardElement,
+        }
+      }).then(function(result) {
+        if (result.error) {
+          // Manejar errores de pago
+      } else {
+          // Pago completado exitosamente
+      }
+    });
+    });
+  </script>
+</section>

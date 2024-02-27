@@ -15,4 +15,5 @@ export default {
   mailUser: process.env.MAIL_USER,
   mailPass: process.env.MAIL_PASS,
   baseUrl: process.env.BASE_URL,
+  stripeKey: process.env.STRIPE_KEY,
 };
