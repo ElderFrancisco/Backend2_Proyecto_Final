@@ -45,7 +45,7 @@ const authToHome = (req, res, next) => {
       res.clearCookie('cookieJWT');
       return next();
     }
-    req.user = credentials.user;
+    req.user = credentials;
 
     return next();
   });

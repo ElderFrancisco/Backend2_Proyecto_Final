@@ -1,13 +1,21 @@
-import { Router } from "express";
-import passport from "passport";
-import { purchaseCartByIdStripe } from "../../controllers/Payment.controller.js";
+import { Router } from 'express';
+import passport from 'passport';
+import {
+  purchaseCartByIdStripe,
+  successPayment,
+} from '../../controllers/Payment.controller.js';
 
 const router = Router();
 
+router.post(
+  '/create-checkout/stripe/:cid',
+  passport.authenticate('jwt', { session: false }),
+  purchaseCartByIdStripe,
+);
 router.get(
-  "/stripe/checkout/:cid",
-  passport.authenticate("jwt", { session: false }),
-  purchaseCartByIdStripe
+  '/success/:tid',
+  passport.authenticate('jwt', { session: false }),
+  successPayment,
 );
 
 export default router;

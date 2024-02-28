@@ -3,6 +3,7 @@
   <p id="cartId" style="display:none">{{cart._id}}</p>
   <ul
     style="list-style-type: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;"
+    id="ul-card"
   >
     {{#each cart.products}}
       <li id="li-card-{{product._id}}"
@@ -40,9 +41,49 @@
 
   </div>
 </div>
-<a href="/api/payments/create-checkout/stripe/{{cart._id}}">Comprar</a>
+<button onclick="clearCart('{{cart._id}}')">Vaciar Carrito</button>
+<button onclick="createCheckout('{{cart._id}}')">Comprar en stripe</button>
 
 <script>
+
+  function createCheckout(cart) {
+    fetch(`/api/payments/create-checkout/stripe/${cart}`, {
+      method: 'POST'
+    })
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error en la solicitud');
+      }
+      return response.json();
+  })
+    .then(data => {
+      window.location.href = data.payload.url
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    });
+  }
+
+
+
+  function clearCart(cart) {
+    fetch(`/api/carts/${cart}`, {
+      method: 'DELETE'
+    })
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error en la solicitud');
+      }
+      return response.json();
+  })
+    .then(data => {
+       const ul = document.getElementById('ul-card')
+       ul.innerHTML = '';
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    });
+  }
   
   function addProduct(product) {
     const cart = ('{{cart._id}}');

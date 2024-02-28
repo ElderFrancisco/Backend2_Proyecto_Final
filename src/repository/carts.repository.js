@@ -35,54 +35,45 @@ export default class CartRepository {
     return this.dao.update(cart);
   };
   createTicket = async (cid) => {
-    const user = await UserService.getByCartID(cid);
-
-    if (!user) return { code: 1 };
-
-    const cartUser = await this.dao.getByID(cid);
-
-    const productsArray = cartUser.products;
-    if (!productsArray.length) {
-      return {
-        code: 2,
-      };
-    }
-
-    const proceso = await procesarProductos(productsArray);
-
-    const successfulProducts = proceso.successful_products.map((p) => ({
-      product: p.product._id,
-      quantity: p.quantity,
-    }));
-
-    if (proceso.failed_products.length > 0) {
-      const productosFallidos = productsArray
-        .filter((p) => proceso.failed_products.includes(p.product._id))
-        .map((p) => ({
-          product: p.product._id,
-          quantity: p.quantity,
-        }));
-      cartUser.products = productosFallidos;
-    } else {
-      cartUser.products = [];
-    }
-    await this.dao.update(cartUser);
-
-    if (successfulProducts.length <= 0) {
-      return {
-        code: 3,
-      };
-    }
-
-    const codigoAleatorio = Math.random().toString(36).substring(2, 22);
-    const ticket = {
-      code: codigoAleatorio,
-      amount: proceso.total_price,
-      purchaser: user.email,
-      products: successfulProducts, // Agregar array de productos comprados
-    };
-
-    return await TicketService.create(ticket);
+    // const user = await UserService.getByCartID(cid);
+    // if (!user) return { code: 1 };
+    // const cartUser = await this.dao.getByID(cid);
+    // const productsArray = cartUser.products;
+    // if (!productsArray.length) {
+    //   return {
+    //     code: 2,
+    //   };
+    // }
+    // const proceso = await procesarProductos(productsArray);
+    // const successfulProducts = proceso.successful_products.map((p) => ({
+    //   product: p.product._id,
+    //   quantity: p.quantity,
+    // }));
+    // if (proceso.failed_products.length > 0) {
+    //   const productosFallidos = productsArray
+    //     .filter((p) => proceso.failed_products.includes(p.product._id))
+    //     .map((p) => ({
+    //       product: p.product._id,
+    //       quantity: p.quantity,
+    //     }));
+    //   cartUser.products = productosFallidos;
+    // } else {
+    //   cartUser.products = [];
+    // // }
+    // await this.dao.update(cartUser);
+    // if (successfulProducts.length <= 0) {
+    //   return {
+    //     code: 3,
+    //   };
+    // }
+    // const codigoAleatorio = Math.random().toString(36).substring(2, 22);
+    // const ticket = {
+    //   code: codigoAleatorio,
+    //   amount: proceso.total_price,
+    //   purchaser: user.email,
+    //   products: successfulProducts, // Agregar array de productos comprados
+    // };
+    // return await TicketService.create(ticket);
   };
 }
 async function procesarProductos(productsArray) {

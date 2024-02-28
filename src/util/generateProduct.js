@@ -8,7 +8,7 @@ export default () => {
     title: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     code: randomCode,
-    price: faker.number.int(),
+    price: faker.commerce.price(),
     status: faker.datatype.boolean(),
     stock: faker.number.int(),
     category: faker.commerce.department(),

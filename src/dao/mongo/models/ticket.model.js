@@ -8,9 +8,11 @@ const ticketCollectionSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  createdAt: {
+    type: Date,
+  },
   purchase_datetime: {
     type: Date,
-    default: Date.now,
   },
   amount: {
     type: Number,
@@ -32,6 +34,21 @@ const ticketCollectionSchema = new mongoose.Schema({
       },
     ],
     default: [],
+  },
+  mercadoPagoPaymentId: {
+    type: String,
+  },
+  stripePaymentId: {
+    type: String,
+  },
+  cartId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'carts',
+    required: true,
+  },
+  status: {
+    type: String,
+    default: 'pending',
   },
 });
 

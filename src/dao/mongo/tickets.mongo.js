@@ -8,7 +8,7 @@ export default class Ticket {
     return ticketmodel.create(data);
   };
   getByID = async (id) => {
-    return ticketmodel.findById(id);
+    return ticketmodel.findById(id).populate('products.product').lean();
   };
   update = async (data) => {
     return ticketmodel.updateOne({ _id: data._id }, data);
