@@ -53,7 +53,7 @@ export default class TicketRepository {
 
     html += `
     </ul>
-    <a href="${config.baseUrl}:${config.port}/api/payments/success/${ticket._id}" style="display: inline-block; background-color: #ff8000; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Ver compra</a>
+    <a href="${config.baseUrl}/api/payments/success/${ticket._id}" style="display: inline-block; background-color: #ff8000; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Ver compra</a>
     <h2 style="color: #666; margin-top: 20px;">Gracias por confiar en nosotros</h2>
     </div>
     `;

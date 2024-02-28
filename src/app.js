@@ -89,7 +89,7 @@ class Server {
 
   listen() {
     this.server.listen(this.port, () => {
-      console.log(`${config.baseUrl}:${this.port}`);
+      console.log(`${config.baseUrl}`);
     });
   }
 }

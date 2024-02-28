@@ -21,7 +21,7 @@ export default class ResetRepository {
 
     <h1 style="color: #333; font-size: 24px; margin-bottom: 20px;">Restablecer contraseña</h1> 
     <p style="color: #666; font-size: 16px; margin-bottom: 20px;">Por favor, presione el siguiente enlace para restablecer su contraseña</p>
-    <a href="${config.baseUrl}:${config.port}/reset-password/${reset._id}/${reset.Code}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s ease;">Restablecer contraseña</a>
+    <a href="${config.baseUrl}/reset-password/${reset._id}/${reset.Code}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s ease;">Restablecer contraseña</a>
 `;
 
     const result = this.mail.send(user, 'Restablecer contraseña', html);

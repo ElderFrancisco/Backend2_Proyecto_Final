@@ -86,7 +86,7 @@ const initializePassport = () => {
       {
         clientID: config.clientID,
         clientSecret: config.clientSecret,
-        callbackURL: `${config.baseUrl}:${config.port}/api/session/githubcallback`,
+        callbackURL: `${config.baseUrl}/api/session/githubcallback`,
       },
       async (asccesToken, refreshToken, profile, done) => {
         try {
