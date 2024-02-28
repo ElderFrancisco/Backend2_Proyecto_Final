@@ -18,8 +18,8 @@ export default class PaymentService {
             name: product.product.title,
             description: product.product.description,
           },
-          currency: 'usd',
-          unit_amount: product.product.price,
+          currency: 'ars',
+          unit_amount: product.product.price * 100,
         },
         quantity: product.quantity,
       };

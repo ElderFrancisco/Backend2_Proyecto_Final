@@ -30,31 +30,31 @@ export default class TicketRepository {
     }
 
     let html = `
-    <div>
-      <h1> 🥳¡¡Gracias por tu compra!! 🥳</h1>
-      <h3>El monto total de su compra es: ${ticket.amount}</h3>
-      <h3>Método Utilizado: ${method}</h3> 
-      <p>En la fecha: ${ticket.purchase_datetime}</p> 
-      <ul>
-      `;
+    <div style="font-family: Arial, sans-serif; text-align: center;">
+        <h1 style="color: #ff8000;"> 🥳¡¡Gracias por tu compra!! 🥳</h1>
+        <h3 style="color: #333;">El monto total de su compra es: $${ticket.amount}</h3>
+        <h3 style="color: #333;">Método Utilizado: ${method}</h3> 
+        <p style="color: #333;">En la fecha: ${ticket.purchase_datetime}</p> 
+        <ul style="list-style-type: none; padding: 0; text-align: left;">
+`;
 
     // Agregar una tarjeta para cada producto
     products.forEach((product) => {
       html += `
-        <li>
-            <div>
-                <h4>${product.product.title}</h4> 
-                <p>Precio: ${product.product.price}$</p> 
-                <p>Cantidad: ${product.quantity}</p> 
-            </div>
-        </li>
+      <li style="margin-bottom: 20px;">
+      <div>
+          <h4 style="color: #333;">${product.product.title}</h4> 
+          <p style="color: #333;">Precio: ${product.product.price}$</p> 
+          <p style="color: #333;">Cantidad: ${product.quantity}</p> 
+      </div>
+  </li>
     `;
     });
 
     html += `
-     </ul>
-     <a href="${config.baseUrl}/api/payments/success/${ticket._id}" >Ver compra</a>
-    <h2>Gracias por confiar en nosotros</h2>
+    </ul>
+    <a href="${config.baseUrl}:${config.port}/api/payments/success/${ticket._id}" style="display: inline-block; background-color: #ff8000; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Ver compra</a>
+    <h2 style="color: #666; margin-top: 20px;">Gracias por confiar en nosotros</h2>
     </div>
     `;
 

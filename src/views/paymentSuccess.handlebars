@@ -10,7 +10,7 @@
                 <li class="horizontal-card">              
                         <ul class="ul-card">
                             <li><strong>Producto: </strong>{{product.title}}</li>
-                            <li><strong>Precio: </strong>{{product.price}}</li>
+                            <li><strong>Precio: </strong>${{product.price}}</li>
                             <li><strong>Cantidad: </strong>{{this.quantity}}</li>
                         </ul>
                 </li>
@@ -24,7 +24,7 @@
 
                 <li><strong>Metodo: </strong>{{ticket.method}}</li>
                 <li><strong>Fecha: </strong>{{ticket.purchase_datetime}}</li>
-                <li><strong>Precio total: </strong>{{ticket.amount}}$</li>
+                <li><strong>Precio total: </strong>${{ticket.amount}}</li>
                 <li><strong>Comprador: </strong>{{ticket.purchaser}}</li>
             </ul>
         </div>

@@ -1,9 +1,7 @@
 import CartServices from '../services/cart.services.js';
 import { CartService, ProductService } from '../repository/index.js';
 import mongoose from 'mongoose';
-import PaymentService from '../services/payment.service.js';
 
-const Stripe = new PaymentService();
 const CartServicesManager = new CartServices();
 
 function getQueryParams(req) {

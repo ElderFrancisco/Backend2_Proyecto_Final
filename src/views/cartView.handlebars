@@ -3,10 +3,10 @@
   <h1>Tu carrito</h1>
   <p id="cartId" style="display:none">{{cart._id}}</p>
   <div class="content flex justify-content-between">
-    <ul id="ul-card" class="width-77vw height-70vh flex flex-direction-row wrap padding-10 margin-l-20 overflow-y-scroll border-1 border-radius-5 justify-content-start">
+    <ul id="ul-card" class="width-75vw height-70vh flex flex-direction-row wrap padding-10 margin-l-20 overflow-y-scroll border-1 border-radius-5 justify-content-start">
     {{#each cart.products}}
       <li id="li-card-{{product._id}}"
-        class="li-card flex flex-direction-column justify-content-between align-items-start width-140px height-400px border-1 border-radius-5 gap-10 margin-10px padding-20">
+        class="li-card flex flex-direction-column justify-content-between align-items-start width-139px height-400px border-1 border-radius-5 gap-10 margin-10px padding-20">
         <h2 class="margin-0">{{product.title}}</h2>
         <p class="margin-0" >Precio: ${{product.price}}</p>
         <p class="margin-0">Código: {{product.code}}</p>
@@ -53,6 +53,24 @@
 
 
 <script>
+  function createCheckoutMercadoPago(cart) {
+    fetch(`/api/payments/create-checkout/mercadopago/${cart}`, {
+      method: 'POST'
+    })
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error en la solicitud');
+      }
+      return response.json();
+  })
+    .then(data => {
+      console.log(data);
+      window.location.href = data.payload.init_point
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    });
+  }
 
   function createCheckoutStripe(cart) {
     fetch(`/api/payments/create-checkout/stripe/${cart}`, {

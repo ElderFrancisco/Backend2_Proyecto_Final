@@ -16,4 +16,6 @@ export default {
   mailPass: process.env.MAIL_PASS,
   baseUrl: process.env.BASE_URL,
   stripeKey: process.env.STRIPE_KEY,
+  mercadopagoSk: process.env.MERCADOPAGO_SK,
+  mercadopagoPk: process.env.MERCADOPAGO_PK,
 };
