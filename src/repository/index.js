@@ -1,4 +1,4 @@
-import { Product, Cart, User, Ticket, Message, Reset } from '../DAO/factory.js';
+import { Product, Cart, User, Ticket, Message, Reset } from '../dao/factory.js';
 
 //import UserRepository from './users.repository.js';
 //import TicketRepository from './tickets.repository.js';
