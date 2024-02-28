@@ -4,6 +4,7 @@ import {
   purchaseCartByIdMercadopago,
   purchaseCartByIdStripe,
   successPayment,
+  failurePayment,
 } from '../../controllers/Payment.controller.js';
 
 const router = Router();
@@ -18,6 +19,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   successPayment,
 );
+
+router.get(
+  '/failure',
+  passport.authenticate('jwt', { session: false }),
+  failurePayment,
+);
+
 router.post(
   '/create-checkout/mercadopago/:cid',
   passport.authenticate('jwt', { session: false }),

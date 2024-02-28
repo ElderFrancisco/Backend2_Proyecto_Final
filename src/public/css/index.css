@@ -1,0 +1,46 @@
+/* Estilos para el contenedor principal */
+.div {
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Estilos para el título principal */
+h1 {
+  color: #333;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+/* Estilos para el saludo personalizado */
+h2 {
+  color: #007bff;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Estilos para el mensaje de inicio de sesión */
+p {
+  color: #666;
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+/* Estilos para los enlaces de inicio de sesión y registro */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para el enlace de documentación */
+p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
+}

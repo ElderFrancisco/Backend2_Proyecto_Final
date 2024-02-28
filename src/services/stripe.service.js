@@ -29,7 +29,7 @@ export default class PaymentService {
       line_items: line_items,
       mode: 'payment',
       success_url: `http://localhost:8080/api/payments/success/${ticketId}`,
-      cancel_url: 'http://localhost:8080/api/payments/cancel',
+      cancel_url: 'http://localhost:8080/api/payments/failure',
     });
     return session;
   };

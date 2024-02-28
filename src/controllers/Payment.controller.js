@@ -227,6 +227,15 @@ export const successPayment = async (req, res) => {
   }
 };
 
+export const failurePayment = async (req, res) => {
+  try {
+    return res.status(200).render('paymentFailure', { user: req.user });
+  } catch (error) {
+    req.logger.error(`Error en failurePayment: ${error}`);
+    return res.status(500).json({ status: 'error' });
+  }
+};
+
 function isValidMongoId(id) {
   return mongoose.Types.ObjectId.isValid(id);
 }

@@ -287,61 +287,6 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/carts/{cid}/purchase:
-    post:
-      summary: genera el ticket de un carrito, agrega los productos disponibles y los que no los deja en el cart
-      tags:
-        - Carts
-        - Tickets
-      parameters:
-        # - $ref: '#/components/parameters/cookieJWT'
-        - $ref: '#/components/parameters/cid'
-      responses:
-        '201':
-          description: ticket generado correctamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  payload:
-                    code:
-                      type: string
-                    purchase_datetime:
-                      type: string
-                    amount:
-                      type: number
-                    purchaser:
-                      type: string
-                    products:
-                      type: array
-                      items:
-                        - product: '65d4bfcb800066a21afca5d6'
-                          quantity: 1
-                        - product: '65d3d1e06c0b43439d9add45'
-                          quantity: 3
-                    _id:
-                      type: ObjectId
-
-                example:
-                  status: success
-                  payload:
-                    _id: ObjectId('652acba407d8295adeab421d')
-                    products:
-                      - product: '65d4bfcb800066a21afca5d6'
-                        quantity: 1
-                      - product: '65d3d1e06c0b43439d9add45'
-                        quantity: 3
-                    code: 123
-                    purchase_datetime: '2022-03-01T00:00:00.000Z'
-                    amount: 123
-                    purchaser: '123@test.com'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 
 components:
   schemas:

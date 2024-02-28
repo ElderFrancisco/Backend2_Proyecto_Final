@@ -24,7 +24,6 @@ export default class PaymentService {
         back_urls: {
           success: `http://localhost:8080/api/payments/success/${ticketId}`,
           failure: 'http://localhost:8080/api/payments/failure',
-          pending: 'http://localhost:8080/api/payments/pending',
         },
       },
     });
