@@ -46,7 +46,6 @@ const initializePassport = () => {
           const result = await UserService.create(newUser);
           return done(null, result);
         } catch (error) {
-          req.logger.error('Error on passport register: ', error);
           return done(null, false);
         }
       },
@@ -64,7 +63,6 @@ const initializePassport = () => {
         try {
           const user = await UserService.getByEmail(username);
           if (!user) {
-            req.logger.debug('user doesnt exist');
             return done(null, false);
           }
           if (HashController.isValidPassword(user, password) == false)
@@ -74,7 +72,6 @@ const initializePassport = () => {
           user.token = token;
           return done(null, user);
         } catch (err) {
-          req.logger.error('Error on passport login: ', err);
           return done(null, false);
         }
       },
@@ -128,7 +125,6 @@ const initializePassport = () => {
         try {
           return done(null, jwt_payload);
         } catch (error) {
-          req.logger.error(error);
           return done(null, false);
         }
       },
