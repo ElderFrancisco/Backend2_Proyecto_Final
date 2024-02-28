@@ -114,10 +114,9 @@ export const successPayment = async (req, res) => {
     if (ticket.status === 'pending') {
       ticket.status = 'paid';
       ticket.purchase_datetime = new Date();
+      TicketService.sendEmail(ticket);
       await TicketService.update(ticket);
     }
-
-    TicketService.sendEmail(ticket);
 
     if (ticket.stripePaymentId) {
       ticket.method = 'Stripe';
@@ -125,7 +124,7 @@ export const successPayment = async (req, res) => {
       ticket.method = 'Mercado Pago';
     }
 
-    return res.status(200).render('paymentSuccess', { ticket });
+    return res.status(200).render('paymentSuccess', { ticket, user: req.user });
   } catch (error) {
     req.logger.error(`Error en successPayment: ${error}`);
     return res.status(500).json({ status: 'error' });

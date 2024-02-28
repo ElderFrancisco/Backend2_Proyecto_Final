@@ -27,6 +27,8 @@ extras:
 -al agregar producto, que salga cartel diciendo no puedes agregar tu propio product
 - quitar css de handlebars
 -verificar agregar prodcutos que sean solo status true
+-cambiar email de envio
+-documentar mocking y hacerlo solo para admin
 
 
 

@@ -1,52 +1,60 @@
-<div>
-  <h1 style="color: #333; text-align: center;">Cart:{{cart._id}}</h1>
+<section id="cartView" class="flex flex-direction-column align-items-center justify-content-center padding-1">
+  <link rel="stylesheet" href="/css/cart.css">
+  <h1>Tu carrito</h1>
   <p id="cartId" style="display:none">{{cart._id}}</p>
-  <ul
-    style="list-style-type: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;"
-    id="ul-card"
-  >
+  <div class="content flex justify-content-between">
+    <ul id="ul-card" class="width-77vw height-70vh flex flex-direction-row wrap padding-10 margin-l-20 overflow-y-scroll border-1 border-radius-5 justify-content-start">
     {{#each cart.products}}
       <li id="li-card-{{product._id}}"
-        class="card"
-        style="width: 300px; margin: 20px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center; text-align: center;"
-      >
-        <h2
-          style="color: #333; margin: 0; font-size: 24px;"
-        >{{product.title}}</h2>
-        <p style="margin: 10px 0;">Precio: ${{product.price}}</p>
-        <p style="margin: 10px 0;">Código: {{product.code}}</p>
-        <p style="margin: 10px 0;">Stock: {{product.stock}}</p>
+        class="li-card flex flex-direction-column justify-content-between align-items-start width-140px height-400px border-1 border-radius-5 gap-10 margin-10px padding-20">
+        <h2 class="margin-0">{{product.title}}</h2>
+        <p class="margin-0" >Precio: ${{product.price}}</p>
+        <p class="margin-0">Código: {{product.code}}</p>
+        <p class="margin-0">Stock: {{product.stock}}</p>
 
         {{#if product.thumbnail}}
           <img
+            id="img-card"
             src="{{product.thumbnail}}"
             alt="{{product.title}}"
-            width="100"
-            style="max-width: 100%; height: auto;"
+            width="100px"
+            height="auto"
           />
         {{else}}
-          <p style="margin: 10px 0;">Imagen no disponible</p>
+          <p>Imagen no disponible</p>
         {{/if}}
-        <div id="quantity">
+        <div id="quantity" class="flex flex-direction-column align-items-center width-100">
           <h2>Cantidad</h2>
-          <p id="card-quantity-{{product._id}}">{{quantity}}</p>
-          <button onclick="addProduct('{{product._id}}')">Agregar</button>
-          <button onclick="removeProduct('{{product._id}}')" >Quitar</button>
+          <div class="flex justify-content-between">
+            <button  class="button-quantity" onclick="removeProduct('{{product._id}}')" ><span class="q-text">-</span></button>
+
+            <p id="card-quantity-{{product._id}}">{{quantity}}</p>
+            <button class="button-quantity" onclick="addProduct('{{product._id}}')"><span class="q-text">+</span></button>
+
+          </div>
+          
         </div>
       </li>
 
     {{/each}}
   </ul>
-  <div id="pagination" style="display: flex; justify-content: center">
-
+  <div class="buttons width-20vw flex flex-direction-column align-items-center justify-content-center padding-10">
+    <a id="volver" href="/products/" id="clear">Seguir Comprando</a>
+    <button id="cart" onclick="clearCart('{{cart._id}}')" id="clear">Vaciar Carrito</button>
+    <span id="pago">Metodos de pago</span>
+    
+    <button  onclick="createCheckoutStripe('{{cart._id}}')" id="stripe"><img  src="/images/stripe.png" width="30px" height="30px" alt=""><p id="stripeLetra">Stripe</p></button>
+    
+    <button id="mp" onclick="createCheckoutMercadoPago('{{cart._id}}')" id="mercadopago"><img src="/images/mercadopago.jpg" height="30px" alt=""></button>
   </div>
-</div>
-<button onclick="clearCart('{{cart._id}}')">Vaciar Carrito</button>
-<button onclick="createCheckout('{{cart._id}}')">Comprar en stripe</button>
+  </div>
+  
+</section>
+
 
 <script>
 
-  function createCheckout(cart) {
+  function createCheckoutStripe(cart) {
     fetch(`/api/payments/create-checkout/stripe/${cart}`, {
       method: 'POST'
     })
@@ -78,6 +86,7 @@
   })
     .then(data => {
        const ul = document.getElementById('ul-card')
+      
        ul.innerHTML = '';
     })
     .catch(error => {

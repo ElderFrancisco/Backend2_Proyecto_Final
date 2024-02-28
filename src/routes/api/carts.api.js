@@ -5,7 +5,6 @@ import {
   emptyCartById,
   getCartById,
   getCarts,
-  purchaseCartById,
   updateManyProducts,
   updateOneCartByIdProduct,
 } from '../../controllers/Cart.controller.js';
@@ -59,12 +58,6 @@ router.delete(
   '/:cid',
   passport.authenticate('jwt', { session: false }),
   emptyCartById,
-);
-
-router.get(
-  '/:cid/purchase',
-  passport.authenticate('jwt', { session: false }),
-  purchaseCartById,
 );
 
 export default router;

@@ -31,8 +31,7 @@ export default class TicketRepository {
 
     let html = `
     <div>
-      <h1>Gracias por tu compra!!</h1>
-      <img src="https://w7.pngwing.com/pngs/963/1004/png-transparent-confetti-celebration-party-emoji-icon-thumbnail.png" alt="conito-Fiesta">
+      <h1> 🥳¡¡Gracias por tu compra!! 🥳</h1>
       <h3>El monto total de su compra es: ${ticket.amount}</h3>
       <h3>Método Utilizado: ${method}</h3> 
       <p>En la fecha: ${ticket.purchase_datetime}</p> 
@@ -44,9 +43,9 @@ export default class TicketRepository {
       html += `
         <li>
             <div>
-                <h4>${product.product.title}</h4> <!-- Suponiendo que cada producto tiene un nombre -->
-                <p>Precio: ${product.product.price}$</p> <!-- Suponiendo que cada producto tiene un precio -->
-                <p>Cantidad: ${product.quantity}</p> <!-- Suponiendo que cada producto tiene una cantidad -->
+                <h4>${product.product.title}</h4> 
+                <p>Precio: ${product.product.price}$</p> 
+                <p>Cantidad: ${product.quantity}</p> 
             </div>
         </li>
     `;

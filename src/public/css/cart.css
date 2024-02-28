@@ -1,0 +1,101 @@
+#stripe {
+  background-color: #635bff;
+  padding-left: 40px;
+  display: flex;
+  flex-direction: row;
+  width: 15vw;
+  justify-content: start;
+  align-items: center;
+  height: 7vh;
+  gap: 20px;
+  color: white;
+  font-weight: bold;
+  border: 1px solid white;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+#stripe:hover {
+  cursor: pointer;
+}
+
+#mp {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  width: 15vw;
+  justify-content: center;
+  align-items: center;
+  height: 7vh;
+  gap: 20px;
+  color: white;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+#mp:hover {
+  cursor: pointer;
+}
+#pago {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+#cart {
+  background-color: rgb(165, 200, 253);
+
+  display: flex;
+  flex-direction: row;
+  width: 15vw;
+  justify-content: center;
+  align-items: center;
+  height: 7vh;
+
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+#cart:hover {
+  cursor: pointer;
+  color: #ffffff;
+}
+#volver {
+  background-color: rgb(255, 255, 255);
+  text-decoration: none;
+
+  display: flex;
+  flex-direction: row;
+  width: 15vw;
+  justify-content: center;
+  align-items: center;
+  height: 7vh;
+
+  color: rgb(0, 0, 0);
+  font-weight: lighter;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+#volver:hover {
+  cursor: pointer;
+}
+#img-card {
+  width: 80%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+.button-quantity {
+  border: 1px solid black;
+  background-color: #ffffff;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.q-text {
+  font-size: 20px;
+}

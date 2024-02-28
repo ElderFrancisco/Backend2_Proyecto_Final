@@ -1,79 +1,32 @@
 <section id="paymentSuccess">
-    <h1>gracias por comprar</h1>
+<link rel="stylesheet" href="/css/ticket.css">
+
+    <h1>GRACIAS POR COMPRAR</h1>
     <div class="container">
         <div class="container-products">
+            <h2 class="title">Productos comprados</h2>
             <ul class="ul-products">
                 {{#each ticket.products}}
-                <li class="horizontal-card">
-                    <div class="card">
-                        <ul>
+                <li class="horizontal-card">              
+                        <ul class="ul-card">
                             <li><strong>Producto: </strong>{{product.title}}</li>
                             <li><strong>Precio: </strong>{{product.price}}</li>
                             <li><strong>Cantidad: </strong>{{this.quantity}}</li>
                         </ul>
-                    </div>
                 </li>
                 {{/each}}
             </ul>
         </div>
         <div class="container-tickets">
-            <ul>
+            <h2 class="title">Ticket</h2>
+            <ul class="ul-ticket">
+            
+
                 <li><strong>Metodo: </strong>{{ticket.method}}</li>
                 <li><strong>Fecha: </strong>{{ticket.purchase_datetime}}</li>
-                <li><strong>Precio total: </strong>{{ticket.amount}}</li>
+                <li><strong>Precio total: </strong>{{ticket.amount}}$</li>
                 <li><strong>Comprador: </strong>{{ticket.purchaser}}</li>
             </ul>
         </div>
     </div>
 </section>
-
-
-
-
- <style>
-    .container-tickets{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 40%;
-        margin: 20px;
-        padding: 20px;
-        border: 1px solid #ccc;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .ul-products{
-        width: 100%;
-        height: 100%;
-    }
-    .container-products{
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-        width: 40%;
-        height: 70vh;
-        margin: 20px;
-        padding: 1px;
-        border: 1px solid #ccc;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow-y: scroll;
-    }
-    .horizontal-card{
-        width: 90%;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-        border: 1px solid #ccc;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .container{
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-    }
- </style>
