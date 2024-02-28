@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { mocking100products } from '../controllers/mocking.controller.js';
+import { mocking100products } from '../controllers/Mocking.controller.js';
 
 const router = Router();
 
