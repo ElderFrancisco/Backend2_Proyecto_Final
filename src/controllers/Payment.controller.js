@@ -38,6 +38,14 @@ export const purchaseCartByIdStripe = async (req, res) => {
     }
 
     const proceso = await procesarProductos(productsArray);
+    if (proceso.total_price * 100 <= 1000) {
+      return res
+        .status(400)
+        .json({
+          status: 'error',
+          error: 'La compra minima en stripe es de $1000',
+        });
+    }
 
     if (proceso.successful_products.length <= 0) {
       return res

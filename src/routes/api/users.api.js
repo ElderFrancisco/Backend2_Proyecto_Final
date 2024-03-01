@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { file, premiumById } from '../../controllers/User.controller.js';
+import {
+  deleteInactiveUsers,
+  file,
+  getUsers,
+  premiumById,
+} from '../../controllers/User.controller.js';
 import upload from '../../middlewares/multer.js';
 
 const router = Router();
@@ -15,6 +20,13 @@ const isAlreadyPremiumOrAdminMiddleware = (req, res, next) => {
   }
   next();
 };
+const isAdmin = (req, res, next) => {
+  if (req.user.rol === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Acceso no autorizado, only admin' });
+  }
+};
 
 router.get(
   '/premium/:id',
@@ -28,6 +40,20 @@ router.post(
   isAlreadyPremiumOrAdminMiddleware,
   upload.array('file'),
   file,
+);
+
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
+  getUsers,
+);
+
+router.delete(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
+  deleteInactiveUsers,
 );
 
 export default router;

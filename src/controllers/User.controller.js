@@ -48,3 +48,25 @@ export const file = async (req, res) => {
     return res.status(500).json({ status: 'error' });
   }
 };
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await UserService.getAll();
+    return res.status(200).json({ status: 'success', payload: users });
+  } catch (error) {
+    req.logger.error(`Error en getUsers: ${error}`);
+    return res.status(500).json({ status: 'error' });
+  }
+};
+
+export const deleteInactiveUsers = async (req, res) => {
+  try {
+    const thirtyMinutesAgo = new Date();
+    thirtyMinutesAgo.setMinutes(thirtyMinutesAgo.getMinutes() - 30);
+    const result = await UserService.deleteInactive(thirtyMinutesAgo);
+    return res.status(200).json({ status: 'success', payload: result });
+  } catch (error) {
+    req.logger.error(`Error en deleteInactiveUsers: ${error}`);
+    return res.status(500).json({ status: 'error' });
+  }
+};

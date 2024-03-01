@@ -5,6 +5,9 @@ export default class UserRepository {
   constructor(dao) {
     this.dao = dao;
   }
+  getAll = async () => {
+    return this.dao.getAll();
+  };
 
   getByID = async (id) => {
     return this.dao.getByID(id);
@@ -32,5 +35,8 @@ export default class UserRepository {
     data.last_connection = Date.now();
     const dataToInsert = new UserUpdateDTO(data);
     return this.dao.update(dataToInsert);
+  };
+  deleteInactive = async (time) => {
+    return this.dao.deleteMany({ last_connection: { $lte: time } });
   };
 }
