@@ -28,8 +28,8 @@ export default class PaymentService {
     const session = await this.stripe.checkout.sessions.create({
       line_items: line_items,
       mode: 'payment',
-      success_url: `http://localhost:8080/api/payments/success/${ticketId}`,
-      cancel_url: 'http://localhost:8080/api/payments/failure',
+      success_url: `${config.baseUrl}8080/api/payments/success/${ticketId}`,
+      cancel_url: `${config.baseUrl}8080/api/payments/failure`,
     });
     return session;
   };

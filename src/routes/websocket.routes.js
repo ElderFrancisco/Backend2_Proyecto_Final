@@ -6,7 +6,7 @@ const isUserMiddleware = (req, res, next) => {
   if (req.user.rol === 'premium' || req.user.rol === 'admin') {
     next();
   } else {
-    res.status(403).json({ error: 'Acceso no autorizado' });
+    res.status(403).redirect('/premium');
   }
 };
 

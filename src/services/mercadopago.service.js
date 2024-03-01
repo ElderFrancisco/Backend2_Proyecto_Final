@@ -22,8 +22,8 @@ export default class PaymentService {
       body: {
         items: items,
         back_urls: {
-          success: `http://localhost:8080/api/payments/success/${ticketId}`,
-          failure: 'http://localhost:8080/api/payments/failure',
+          success: `${config.baseUrl}/api/payments/success/${ticketId}`,
+          failure: `${config.baseUrl}/api/payments/failure`,
         },
       },
     });
