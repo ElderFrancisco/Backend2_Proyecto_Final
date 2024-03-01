@@ -1,5 +1,23 @@
 <section id="cartView" class="flex flex-direction-column align-items-center justify-content-center padding-1">
   <link rel="stylesheet" href="/css/cart.css">
+  
+  
+  <div id="waiting-alert"  class="flex">
+    <p>Redirijiendote</p>
+    <img src="/images/loading.gif" width="30px" height="auto" class="padding-l-5" alt="">
+  </div>
+  <div id="minima-alert"  class="flex">
+    <p>la compra minima en Stripe es de $1000</p>
+    <img src="/images/error.svg" width="30px" height="auto" class="padding-l-5" alt="">
+  </div>
+  <div id="carrito-vacio"  class="flex">
+    <p>Debes tener productos en tu carrito para poder comprar😅</p>
+    <img src="/images/alert.svg" width="30px" height="auto" class="padding-l-5" alt="">
+  </div>
+  
+  
+  
+  
   <h1>Tu carrito</h1>
   <p id="cartId" style="display:none">{{cart._id}}</p>
   <div class="content flex justify-content-between">
@@ -54,11 +72,25 @@
 
 <script>
   function createCheckoutMercadoPago(cart) {
+      const customWaiting = document.getElementById('waiting-alert');
+      const carritoVacio = document.getElementById('carrito-vacio');
+      customWaiting.style.display = 'flex'; 
+      carritoVacio.style.display = 'none'; 
     fetch(`/api/payments/create-checkout/mercadopago/${cart}`, {
       method: 'POST'
     })
     .then(response => {
       if (!response.ok) {
+       
+
+          if (response.status === 422) {
+            customWaiting.style.display = 'none'; 
+            carritoVacio.style.display = 'flex';
+            setTimeout(() => {
+              carritoVacio.style.display = 'none';
+            }, 3000);
+          }
+
           throw new Error('Error en la solicitud');
       }
       return response.json();
@@ -73,19 +105,42 @@
   }
 
   function createCheckoutStripe(cart) {
+    const customWaiting = document.getElementById('waiting-alert');
+    const minimaCompra = document.getElementById('minima-alert');
+    const carritoVacio = document.getElementById('carrito-vacio');
+    customWaiting.style.display = 'flex'; 
+    carritoVacio.style.display = 'none'; 
+    minimaCompra.style.display = 'none'; 
     fetch(`/api/payments/create-checkout/stripe/${cart}`, {
       method: 'POST'
     })
     .then(response => {
       if (!response.ok) {
+          if (response.status === 403) {
+            customWaiting.style.display = 'none'; 
+            minimaCompra.style.display = 'flex';
+            setTimeout(() => {
+              minimaCompra.style.display = 'none';
+            }, 3000);
+          }
+          if (response.status === 422) {
+            customWaiting.style.display = 'none'; 
+            carritoVacio.style.display = 'flex';
+            setTimeout(() => {
+              carritoVacio.style.display = 'none';
+            }, 3000);
+          }
+
           throw new Error('Error en la solicitud');
       }
       return response.json();
+      
   })
     .then(data => {
       window.location.href = data.payload.url
     })
     .catch(error => {
+
       console.log('Error:', error);
     });
   }

@@ -105,6 +105,12 @@
 .width-30vw {
   width: 30vw;
 }
+.show-flex {
+  display: flex;
+}
+.show-block {
+  display: block;
+}
 
 .width-20vw {
   width: 20vw;
@@ -114,6 +120,10 @@
 }
 .width-10vw {
   width: 10vw;
+}
+
+.padding-l-5 {
+  padding-left: 5px;
 }
 
 .padding-l-20 {

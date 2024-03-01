@@ -33,10 +33,4 @@ export default class PaymentService {
     });
     return session;
   };
-
-  // retrievePaymentIntent = async (id) => {
-  //   const paymentIntent = await this.stripe.(id);
-  //   console.log(paymentIntent);
-  //   return paymentIntent;
-  // };
 }

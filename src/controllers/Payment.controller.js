@@ -34,18 +34,17 @@ export const purchaseCartByIdStripe = async (req, res) => {
 
     const productsArray = cart.products;
     if (!productsArray.length) {
-      return res.status(404).json({ status: 'error', error: 'Cart Empty' });
+      return res.status(422).json({ status: 'error', error: 'Cart Empty' });
+    }
+    const price = calcularPrice(productsArray);
+    if (price < 1000) {
+      return res.status(403).json({
+        status: 'error',
+        error: 'La compra minima en stripe es de $1000',
+      });
     }
 
     const proceso = await procesarProductos(productsArray);
-    if (proceso.total_price * 100 <= 1000) {
-      return res
-        .status(400)
-        .json({
-          status: 'error',
-          error: 'La compra minima en stripe es de $1000',
-        });
-    }
 
     if (proceso.successful_products.length <= 0) {
       return res
@@ -135,7 +134,7 @@ export const purchaseCartByIdMercadopago = async (req, res) => {
 
     const productsArray = cart.products;
     if (!productsArray.length) {
-      return res.status(404).json({ status: 'error', error: 'Cart Empty' });
+      return res.status(422).json({ status: 'error', error: 'Cart Empty' });
     }
 
     const proceso = await procesarProductos(productsArray);
@@ -268,11 +267,28 @@ async function procesarProductos(productsArray) {
       }
 
       // Tu lógica con el producto obtenido de la base de datos
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
   return {
     total_price: precioTotal,
     successful_products: successfulProducts,
     failed_products: productsNotProcessed,
   };
+}
+
+function calcularPrice(productsArray) {
+  let precioTotal = 0;
+  for (const p of productsArray) {
+    try {
+      if (p.product.stock >= p.quantity) {
+        const sumaTotalDeProducto = p.quantity * p.product.price;
+        precioTotal += sumaTotalDeProducto;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return precioTotal;
 }

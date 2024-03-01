@@ -93,8 +93,7 @@ export const getCarts = async (req, res) => {
     return res.status(500).json({ status: 'error' });
   }
 };
-
-export const updateOneCartByIdProduct = async (req, res) => {
+export const addProductById = async (req, res) => {
   try {
     const cid = req.params.cid;
     if (!isValidMongoId(cid)) {
@@ -118,7 +117,7 @@ export const updateOneCartByIdProduct = async (req, res) => {
 
     if (req.user.email === product.owner) {
       return res
-        .status(401)
+        .status(403)
         .json({ status: 'error', error: 'Cant add yourself product' });
     }
     const result = await CartServicesManager.updateOneCart(cid, pid);
@@ -128,7 +127,7 @@ export const updateOneCartByIdProduct = async (req, res) => {
     }
     return res.status(201).json({ status: 'Success', payload: result });
   } catch (error) {
-    req.logger.error(`Error en updateOneCartByIdProduct ${error}`);
+    req.logger.error(`Error en addProductById ${error}`);
     return res.status(500).json({ status: 'error' });
   }
 };

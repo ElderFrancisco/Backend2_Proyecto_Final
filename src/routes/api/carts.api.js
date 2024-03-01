@@ -6,7 +6,7 @@ import {
   getCartById,
   getCarts,
   updateManyProducts,
-  updateOneCartByIdProduct,
+  addProductById,
 } from '../../controllers/Cart.controller.js';
 import passport from 'passport';
 
@@ -38,7 +38,7 @@ router.post(
   '/:cid/product/:pid',
   passport.authenticate('jwt', { session: false }),
   isUserMiddleware,
-  updateOneCartByIdProduct,
+  addProductById,
 );
 
 router.delete(

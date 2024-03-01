@@ -1,15 +1,23 @@
 <section id="productView">
   <link rel="stylesheet" href="/css/productView.css">
-  <a class="back" href="/products/"><img src="/images/arrow.png" class="arrow" alt=""></a>
+  <a class="back" href="/products/"><img src="/images/arrow.png"  class="arrow" alt=""></a>
   <div id="custom-alert" >
   <!-- Aquí puedes personalizar el contenido de tu alerta -->
   <p> Producto agregado al carrito.</p>
   <img class="check" src="/images/check.webp" alt="">
 </div>
 
-<div id="waiting-alert" >
+<div id="waiting-alert"  class="flex">
   <!-- Aquí puedes personalizar el contenido de tu alerta -->
-  <p>Agregando al carrito...</p>
+  <p>Agregando al carrito</p>
+  <img src="/images/loading.gif" width="30px" height="auto" class="padding-l-5" alt="">
+
+</div>
+
+<div id="owner-alert"  class="flex">
+  <!-- Aquí puedes personalizar el contenido de tu alerta -->
+  <p>No puedes agregar tus propios productos</p>
+  <img src="/images/alert.svg" width="30px" height="auto" class="padding-l-5" alt="">
 
 </div>
 
@@ -41,6 +49,7 @@
   function addProduct(product) {
      const customWaiting = document.getElementById('waiting-alert');
         const customAlert = document.getElementById('custom-alert');
+        const ownerAlert = document.getElementById('owner-alert');
         customAlert.style.display = 'none'; // Ocultar el alerta después de algunos segundos
 
 
@@ -50,7 +59,17 @@
         method: 'POST'
       })
       .then(response => {
+
         if (!response.ok) {
+
+            if (response.status === 403) {
+                customWaiting.style.display = 'none'; 
+                ownerAlert.style.display = 'flex'; // Mostrar el alerta
+                setTimeout(() => {
+                ownerAlert.style.display = 'none'; // Ocultar el alerta   de algunos segundos
+                }, 3000);
+            }
+
             throw new Error('Error en la solicitud');
         }
         return response.json();
