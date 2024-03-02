@@ -7,6 +7,7 @@ import {
   updateProductById,
   deleteProductById,
 } from '../../controllers/Product.controller.js';
+import upload from '../../middlewares/multer.js';
 
 const isAdminMiddleware = (req, res, next) => {
   if (req.user.rol === 'admin' || req.user.rol === 'premium') {
@@ -24,6 +25,7 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   isAdminMiddleware,
+  upload.single('productFile'),
   addProduct,
 );
 

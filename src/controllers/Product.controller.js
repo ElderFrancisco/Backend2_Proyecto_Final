@@ -62,16 +62,30 @@ export const addProduct = async (req, res) => {
         .status(400)
         .json({ status: 'error', error: 'Not sent correct data' });
     }
+
     if (req.user.rol == 'premium' || req.user.rol == 'admin') {
       req.body.owner = req.user.email;
+    }
+    if (req.body.price < 1) {
+      return res
+        .status(400)
+        .json({ status: 'error', error: 'minimun price is $1' });
     }
 
     const productCode = await ProductService.getByQuery({
       code: req.body.code,
     });
     if (productCode) {
-      return res.status(409).json({ status: 'error', error: 'Already exists' });
+      return res
+        .status(409)
+        .json({ status: 'error', error: 'Code Already exists' });
     }
+    // const pathWithoutSrc = element.path.replace('src\\public', '');
+    // user.documents.push({ name: element.originalname, path: pathWithoutSrc });
+    // console.log(req.file);
+
+    const pathWithoutSrc = req.file.path.replace('src\\public', '');
+    req.body.thumbnail = [pathWithoutSrc];
 
     const NewProduct = await ProductService.create(req.body);
 
@@ -213,7 +227,7 @@ export const renderGetProductById = async (req, res) => {
 export const renderAddProduct = async (req, res) => {
   try {
     const user = req.user;
-    return res.status(200).render('file', { user: user });
+    return res.status(200).render('addProduct', { user: user });
   } catch (error) {
     req.logger.error('renderAddProduct: ' + error);
     return res.status(500).json({ status: 'error' });

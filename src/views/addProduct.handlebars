@@ -1,0 +1,88 @@
+<section id="addProduct">
+    <link rel="stylesheet" href="/css/addProduct.css">
+    <div>
+        <h1>Agregue un nuevo producto</h1>
+        <form id="productForm" class="flex flex-direction-column" enctype="multipart/form-data">
+            <input type="hidden" name="type" value="product">
+            <label for="inputTitle">Título</label>
+            <input type="text" id="inputTitle" name="title" placeholder="Título" required>
+            <label for="inputDescription">Descripción</label>
+            <input type="text" id="inputDescription" name="description" placeholder="Descripción">
+            <label for="inputPrice">Precio</label>
+            <input type="number" id="inputPrice" name="price" placeholder="Precio" required>
+            <label for="inputCategory">Categoría</label>
+            <input type="text" id="inputCategory" name="category" placeholder="Categoría">
+            <label for="inputStock">Stock</label>
+            <input type="number" id="inputStock" name="stock" placeholder="Stock">
+            <label for="inputCode">Codigo</label>
+            <input type="text" id="inputCode" name="code" placeholder="Codigo">
+            <label for="inputThumbnail">Imagen</label>
+            <input type="file" id="inputThumbnail" name="productFile" accept="image/jpeg, image/png, image/webp" required>
+            <button type="button" onclick="submitForm()">Agregar Producto</button>
+        </form>
+    </div>
+</section>
+
+<script>
+    function submitForm() {
+        const title = document.getElementById("inputTitle").value;
+        const description = document.getElementById("inputDescription").value;
+        const price = parseInt(document.getElementById("inputPrice").value);
+        const category = document.getElementById("inputCategory").value;
+        const code = document.getElementById("inputCode").value;
+        const stock = parseInt(document.getElementById("inputStock").value);
+        const thumbnail = document.getElementById("inputThumbnail").files[0];
+
+        // Validar que el precio sea positivo
+        if (price < 1) {
+            alert("El precio debe ser mayor a 1.");
+            return;
+        }
+
+        // Validar que el stock sea positivo
+        if (stock < 1) {
+            alert("El stock debe ser mayor a 1.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("type", "product");
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("price", price);
+        formData.append("category", category);
+        formData.append("stock", stock);
+        formData.append("code", code);
+
+        formData.append("productFile", thumbnail);
+
+        fetch("/api/products", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            console
+            if (!response.ok) {
+                if (response.status === 409) {
+                    alert("Ya existe un producto con ese Codigo.");
+                     throw new Error("Error Codigo ya existe.");
+                }else{
+                   throw new Error("Error en la solicitud.");
+                    alert("Ha ocurrido un error al agregar el producto.");
+                    }
+                
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            // Manejar la respuesta si es necesario
+            console.log(data);
+            alert("Producto agregado exitosamente.");
+            window.location.href = `/products/${data.payload._id}`;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+</script>
