@@ -2,6 +2,7 @@ import config from '../config/config.js';
 import ProductCreateDTO from '../DTO/products/products.dto.js';
 import ProductUpdateDTO from '../DTO/products/productsUpdate.dto.js';
 import Mail from '../util/mail.js';
+import { CartService } from './index.js';
 
 export default class ProductRepository {
   constructor(dao) {
@@ -49,6 +50,7 @@ export default class ProductRepository {
       };
       this.mail.send(user, 'Producto eliminado', html);
     }
+    CartService.deleteOneProductOnManyCarts(id);
 
     return this.dao.deleteByID(id);
   };

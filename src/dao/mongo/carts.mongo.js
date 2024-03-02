@@ -23,4 +23,7 @@ export default class Cart {
   deleteByID = async (id) => {
     return cartModel.deleteOne({ _id: id });
   };
+  getManyByQuery = async (query) => {
+    return cartModel.find(query);
+  };
 }

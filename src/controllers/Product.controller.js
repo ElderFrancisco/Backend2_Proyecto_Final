@@ -199,9 +199,7 @@ export const renderGetProductById = async (req, res) => {
     }
     const product = await ProductService.getByID(Id);
     if (product == null) {
-      return res
-        .status(404)
-        .json({ status: 'error', error: 'product not found' });
+      return res.status(404).redirect('/products');
     }
     return res
       .status(200)
