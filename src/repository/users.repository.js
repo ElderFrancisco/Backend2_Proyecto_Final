@@ -39,4 +39,7 @@ export default class UserRepository {
   deleteInactive = async (time) => {
     return this.dao.deleteMany({ last_connection: { $lte: time } });
   };
+  deleteById = async (id) => {
+    return this.dao.deleteByID(id);
+  };
 }

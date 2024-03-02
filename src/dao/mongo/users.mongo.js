@@ -14,9 +14,14 @@ export default class User {
     return UserModel.updateOne({ _id: data._id }, data, { new: true });
   };
   getAll = async () => {
-    return UserModel.find().select('first_name last_name email rol cartId');
+    return UserModel.find()
+      .select('_id first_name last_name email rol cartId')
+      .lean();
   };
   deleteMany = async (query) => {
     return UserModel.deleteMany(query);
+  };
+  deleteByID = async (id) => {
+    return UserModel.findByIdAndDelete(id);
   };
 }

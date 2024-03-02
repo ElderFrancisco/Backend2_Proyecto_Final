@@ -5,6 +5,8 @@ import {
   file,
   getUsers,
   premiumById,
+  deleteById,
+  makeUserById,
 } from '../../controllers/User.controller.js';
 import upload from '../../middlewares/multer.js';
 
@@ -54,6 +56,18 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   isAdmin,
   deleteInactiveUsers,
+);
+router.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
+  deleteById,
+);
+router.put(
+  '/returnToUser/:id',
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
+  makeUserById,
 );
 
 export default router;

@@ -1,6 +1,7 @@
 import { getProductsServices } from '../services/product.services.js';
 import { ProductService } from '../repository/index.js';
 import mongoose from 'mongoose';
+import { Admin } from 'mongodb';
 
 function getPathUrl(req) {
   const currentPath = req.originalUrl;
@@ -61,7 +62,7 @@ export const addProduct = async (req, res) => {
         .status(400)
         .json({ status: 'error', error: 'Not sent correct data' });
     }
-    if (req.user.rol == 'premium') {
+    if (req.user.rol == 'premium' || req.user.rol == 'admin') {
       req.body.owner = req.user.email;
     }
 
@@ -140,6 +141,7 @@ export const deleteProductById = async (req, res) => {
         .json({ status: 'error', error: 'Invalid Product ID' });
     }
     const productToDelete = await ProductService.getByID(Id);
+
     if (!productToDelete) {
       req.logger.info('Product not found');
       return res.status(404).json({ status: 'error', error: 'Not Found' });
@@ -151,7 +153,7 @@ export const deleteProductById = async (req, res) => {
       });
     }
 
-    const productDelete = await ProductService.deleteByID(Id);
+    const productDelete = await ProductService.deleteByID(Id, productToDelete);
     if (productDelete.deletedCount === 1) {
       return res
         .status(204)
@@ -162,7 +164,7 @@ export const deleteProductById = async (req, res) => {
       .status(404)
       .json({ status: 'error', error: 'Product Not Found' });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error('error on deleteProductById: ' + error);
     return res.status(500).json({ status: 'error' });
   }
 };

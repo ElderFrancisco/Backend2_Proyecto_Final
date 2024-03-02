@@ -1,0 +1,77 @@
+<section id="adminUsersView">
+    <link rel="stylesheet" href="/css/adminUsers.css">
+    <div>
+        <h1>Administrador de usuarios</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Rol</th>
+                    <th>Cart ID</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr id="{{this._id}}">
+                    <td>{{this.first_name}}</td>
+                    <td>{{this.last_name}}</td>
+                    <td id="rol-{{this._id}}">{{this.rol}}</td>
+                    <td>{{this.cartId}}</td>
+                    <td>
+                        <button class="pasarAUser" onclick="pasarAUser('{{this._id}}')">Pasar a User</button>
+                        <button class="borrar" onclick="borrar('{{this._id}}')">Borrar</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+
+    function borrar(id) {
+    fetch(`/api/users/${id}`, {
+      method: 'DELETE'
+    })
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error en la solicitud');
+      }
+      if (response.status === 200) {
+        const tr = document.getElementById(id);
+        tr.remove();
+      }
+      return response.json();
+      
+    })
+    .then(data => {
+
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    });
+  }
+
+  function pasarAUser(id) {
+    console.log(id)
+    fetch(`/api/users/returnToUser/${id}`, {
+      method: 'PUT'
+    })
+    .then(response => {
+      if (!response.ok) {
+          throw new Error('Error en la solicitud');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const rol = document.getElementById(`rol-${id}`);
+      rol.textContent = 'user';
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    });
+  }
+</script>
