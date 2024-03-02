@@ -85,18 +85,7 @@
 </style>
 
 
-      <div>
-        {{#if products.hasPrevPage }}
-             
-           {{else}}
-        <h1>Name: {{user.first_name}}</h1>
-        <h4>apellido:{{user.last_name}}</h4>
-        <h4>email:{{user.email}}</h4>
-        <h4>age:{{user.age}}</h4>
-        <h4>rol:{{user.rol}}</h4>
-           {{/if}}
-      
-      </div>
+
       <h3>Productos</h3>
       <ul class="ul-card">
           {{#each products.payload}}
