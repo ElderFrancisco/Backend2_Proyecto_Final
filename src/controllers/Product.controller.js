@@ -83,8 +83,12 @@ export const addProduct = async (req, res) => {
     // const pathWithoutSrc = element.path.replace('src\\public', '');
     // user.documents.push({ name: element.originalname, path: pathWithoutSrc });
     // console.log(req.file);
+    const pathWithoutSrc = req.file.path.replace(
+      /^.*src[\/\\]public[\/\\]/,
+      '\\',
+    );
+    console.log(pathWithoutSrc);
 
-    const pathWithoutSrc = req.file.path.replace('src\\public', '');
     req.body.thumbnail = [pathWithoutSrc];
 
     const NewProduct = await ProductService.create(req.body);
