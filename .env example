@@ -1,0 +1,15 @@
+PORT=8080
+MONGO_URL='mongodb+srv://usuario:contrasena@cluster.mongodb.net/db_name'
+MONGO_NAME='ecommerce'
+CLIENTID=abcdefg123456789
+CLIENTSECRET=123456789abcdefg
+PRIVATEKEY='s3cr3t'
+LOGGER_CONSOLE_LEVEL='debug'
+LOGGER_FILE_LEVEL='info'
+PERSISTENCE='MONGO'
+MAIL_USER=fakeuser@example.com
+MAIL_PASS=fakepassword
+BASE_URL='http://localhost:8080'
+STRIPE_KEY='sk_test_fake_key'
+MERCADOPAGO_SK='TEST-fake-secret-key'
+MERCADOPAGO_PK='TEST-fake-public-key'
