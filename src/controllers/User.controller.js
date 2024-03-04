@@ -37,7 +37,10 @@ export const file = async (req, res) => {
     }
 
     req.files.forEach((element) => {
-      const pathWithoutSrc = element.path.replace('src\\public', '');
+      const pathWithoutSrc = element.path.replace(
+        /^.*src[\/\\]public[\/\\]/,
+        '\\',
+      );
       user.documents.push({ name: element.originalname, path: pathWithoutSrc });
     });
 

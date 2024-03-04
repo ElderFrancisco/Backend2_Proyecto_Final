@@ -30,6 +30,9 @@ export default class ProductRepository {
     const dataToInsert = new ProductUpdateDTO(data);
     return this.dao.update(dataToInsert);
   };
+  getManyByQuery = async (query) => {
+    return this.dao.getManyByQuery(query);
+  };
   deleteByID = async (id, product) => {
     if (product.owner !== 'admin') {
       let html = `<h1 style="color: #333; font-size: 24px; margin-bottom: 20px;">Producto eliminado</h1>

@@ -1,0 +1,59 @@
+<section id="adminProductsView">
+    <link rel="stylesheet" href="/css/adminProducts.css">
+    <div>
+        <h1>Administrador de productos</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Código</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr id="{{this._id}}">
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.code}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{#if this.status}}Activo{{else}}Inactivo{{/if}}</td>
+                    <td>{{this.stock}}</td>
+                    <td>{{this.category}}</td>
+                    <td>
+                        <a href="/products/modify/{{this._id}}">Editar</a>
+                        <button class="borrar" onclick="borrar('{{this._id}}')">Borrar</button>
+                        <!-- Agrega aquí otros botones de acciones si los necesitas -->
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    function borrar(id) {
+        fetch(`/api/products/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la solicitud');
+            }
+            if (response.status === 204) {
+                const tr = document.getElementById(id);
+                tr.remove();
+            }
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
+    }
+    // Puedes agregar aquí otras funciones JavaScript si es necesario
+</script>

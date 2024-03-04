@@ -122,6 +122,7 @@ export const getProductById = async (req, res) => {
 export const updateProductById = async (req, res) => {
   try {
     const Id = req.params.pid;
+
     if (!isValidMongoId(Id)) {
       return res
         .status(400)
@@ -132,7 +133,7 @@ export const updateProductById = async (req, res) => {
     if (!productToUpdate) {
       req.logger.info('Product not found');
       return res
-        .status(404)
+        .status(405)
         .json({ status: 'error', error: 'Product Not Found' });
     }
 
@@ -142,7 +143,19 @@ export const updateProductById = async (req, res) => {
         error: 'This is not your product or you are not admin',
       });
     }
+    const productCode = await ProductService.getByQuery({
+      code: req.body.code,
+    });
+    console.log(productCode);
+    console.log(body.code);
+    console.log(productToUpdate.code);
+    if (productCode && body.code !== productToUpdate.code) {
+      return res
+        .status(409)
+        .json({ status: 'error', error: 'Code Already exists' });
+    }
     body['_id'] = Id;
+    console.log(body);
     const result = await ProductService.update(body);
     return res.status(200).json({ status: 'success', payload: result });
   } catch (error) {
@@ -191,7 +204,11 @@ export const renderGetProducts = async (req, res) => {
   try {
     const pathUrl = getPathUrl(req);
     const params = getQueryParams(req);
+    if (params.query == null) {
+      params.query = { status: true };
+    }
     const user = req.user;
+
     const productList = await getProductsServices(params, pathUrl);
     if (productList.status == 'error') {
       return res.status(500).json({ status: 'error' });
@@ -232,6 +249,43 @@ export const renderAddProduct = async (req, res) => {
   try {
     const user = req.user;
     return res.status(200).render('addProduct', { user: user });
+  } catch (error) {
+    req.logger.error('renderAddProduct: ' + error);
+    return res.status(500).json({ status: 'error' });
+  }
+};
+
+export const renderOwnerProducts = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const productList = await ProductService.getManyByQuery({
+      owner: user.email,
+    });
+
+    return res
+      .status(200)
+      .render('ownerProducts', { user: user, products: productList });
+  } catch (error) {
+    req.logger.error('renderAddProduct: ' + error);
+    return res.status(500).json({ status: 'error' });
+  }
+};
+
+export const renderOwnerProductModify = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const product = await ProductService.getByID(req.params.pid);
+    if (product == null) {
+      return res.status(404).redirect('/404');
+    }
+    if (product.owner !== user.email && user.rol !== 'admin') {
+      return res.status(403).redirect('/products');
+    }
+    return res
+      .status(200)
+      .render('modifyProduct', { user: user, product: product });
   } catch (error) {
     req.logger.error('renderAddProduct: ' + error);
     return res.status(500).json({ status: 'error' });

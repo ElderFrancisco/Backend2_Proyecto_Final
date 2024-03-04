@@ -2,6 +2,8 @@ import {
   renderGetProducts,
   renderGetProductById,
   renderAddProduct,
+  renderOwnerProducts,
+  renderOwnerProductModify,
 } from '../controllers/Product.controller.js';
 
 import { Router } from 'express';
@@ -32,6 +34,24 @@ router.get(
   }),
   isAdminOrPremium,
   renderAddProduct,
+);
+router.get(
+  '/ownerproducts',
+  passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/login',
+  }),
+  isAdminOrPremium,
+  renderOwnerProducts,
+);
+router.get(
+  '/modify/:pid',
+  passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/login',
+  }),
+  isAdminOrPremium,
+  renderOwnerProductModify,
 );
 
 router.get(

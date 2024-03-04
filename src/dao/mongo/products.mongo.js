@@ -11,7 +11,10 @@ export default class Product {
     return productModel.findById(id).lean();
   };
   getByQuery = async (query) => {
-    return productModel.findOne(query);
+    return productModel.findOne(query).lean();
+  };
+  getManyByQuery = async (query) => {
+    return productModel.find(query).lean();
   };
   update = async (data) => {
     return productModel.findOneAndUpdate({ _id: data._id }, data, {
