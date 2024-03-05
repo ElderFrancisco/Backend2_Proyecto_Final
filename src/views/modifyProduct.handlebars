@@ -30,6 +30,9 @@
             <label for="category">Categoría:</label>
             <input type="text" id="category" name="category" value="{{product.category}}">
 
+            <label for="owner">Propietario:</label>
+            <input type="text" id="owner" name="owner" value="{{product.owner}}" readonly>
+
             <button type="submit" >Guardar Cambios</button>
         </form>
     </div>
@@ -72,9 +75,17 @@ document.getElementById('editProductForm').addEventListener('submit', function(e
     .then(response => {
         if (!response.ok) {
             if (response.status === 409) {
-                alert("Ya existe un producto con ese Código.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ya existe un producto con ese Código.'
+                });
             } else {
-                alert("Ha ocurrido un error al agregar el producto.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ha ocurrido un error al agregar el producto.'
+                });
             }
             throw new Error("Error en la solicitud.");
         }
@@ -82,12 +93,16 @@ document.getElementById('editProductForm').addEventListener('submit', function(e
     })
     .then(data => {
         console.log(data);
-        alert("Producto agregado exitosamente.");
-        //window.location.href = `/products/${data.payload._id}`;
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Producto actualizado exitosamente.'
+        }).then((result) => {
+             window.location.href = `/products/${data.payload._id}`;
+        });
     })
     .catch(error => {
         console.error("Error:", error);
     });
 });
-
 </script>

@@ -1,5 +1,5 @@
 <section id="adminProductsView">
-    <link rel="stylesheet" href="/css/adminProducts.css">
+    <link rel="stylesheet" href="/css/ownerProducts.css">
     <div>
         <h1>Administrador de productos</h1>
         <table>
@@ -26,9 +26,8 @@
                     <td>{{this.stock}}</td>
                     <td>{{this.category}}</td>
                     <td>
-                        <a href="/products/modify/{{this._id}}">Editar</a>
+                        <a href="/products/modify/{{this._id}}" class="editar">Editar</a>
                         <button class="borrar" onclick="borrar('{{this._id}}')">Borrar</button>
-                        <!-- Agrega aquí otros botones de acciones si los necesitas -->
                     </td>
                 </tr>
                 {{/each}}
@@ -39,20 +38,42 @@
 
 <script>
     function borrar(id) {
-        fetch(`/api/products/${id}`, {
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la solicitud');
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/products/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la solicitud');
+                    }
+                    if (response.status === 204) {
+                        const tr = document.getElementById(id);
+                        tr.remove();
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El producto ha sido eliminado.',
+                            'success'
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                    Swal.fire(
+                        'Error',
+                        'Ha ocurrido un error al intentar eliminar el producto.',
+                        'error'
+                    );
+                });
             }
-            if (response.status === 204) {
-                const tr = document.getElementById(id);
-                tr.remove();
-            }
-        })
-        .catch(error => {
-            console.log('Error:', error);
         });
     }
     // Puedes agregar aquí otras funciones JavaScript si es necesario

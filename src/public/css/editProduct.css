@@ -1,0 +1,70 @@
+/* Estilo para el contenedor principal */
+#modifyProduct {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo para el formulario */
+#editProductForm {
+  width: 400px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Estilo para los elementos del formulario */
+#editProductForm label {
+  margin-bottom: 2px;
+  font-weight: bold;
+}
+
+#editProductForm input,
+#editProductForm select {
+  width: calc(100% - 12px);
+  padding: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+#editProductForm button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#editProductForm button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo para el título */
+#editProductForm h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+#editProductForm input[readonly],
+#editProductForm input[readonly]:focus,
+#editProductForm select[readonly],
+#editProductForm select[readonly]:focus {
+  background-color: #f0f0f0; /* Cambia el color de fondo a gris claro */
+  color: #666; /* Cambia el color del texto a un tono más oscuro */
+  border-color: #ddd; /* Cambia el color del borde a un tono más claro */
+  cursor: not-allowed; /* Cambia el cursor para indicar que no se puede editar */
+}
+
+/* Opcional: Estilo para el cursor cuando se pasa sobre los campos de solo lectura */
+#editProductForm input[readonly]:hover,
+#editProductForm select[readonly]:hover {
+  background-color: #f0f0f0; /* Cambia el color de fondo a gris claro */
+  color: #666; /* Cambia el color del texto a un tono más oscuro */
+  border-color: #ddd; /* Cambia el color del borde a un tono más claro */
+  cursor: not-allowed; /* Cambia el cursor para indicar que no se puede editar */
+}

@@ -258,10 +258,15 @@ export const renderAddProduct = async (req, res) => {
 export const renderOwnerProducts = async (req, res) => {
   try {
     const user = req.user;
+    let productList;
 
-    const productList = await ProductService.getManyByQuery({
-      owner: user.email,
-    });
+    if (user.rol === 'admin') {
+      productList = await ProductService.getManyByQuery({});
+    } else {
+      productList = await ProductService.getManyByQuery({
+        owner: user.email,
+      });
+    }
 
     return res
       .status(200)

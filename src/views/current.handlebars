@@ -1,4 +1,5 @@
 <section id="current"> 
+    <link rel="stylesheet" href="/css/current.css">
     <form action="" class="form">
     <h1>{{user.first_name}} {{user.last_name}}</h1>
     <div>   
@@ -45,90 +46,3 @@
     </form>
 
 </section>
-<style>
-    .btn-cart{
-        background-color: rgb(108, 123, 255);
-        width: 70px;
-        height: 29px;
-
-        color: black;
-        border: none;
-        border-radius: 5px;
-        padding: 5px;
-        margin-left: 10px;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-
-        font-size: 16px;
-    }
-    .btn-premium{
-        width: 70px;
-        height: 29px;
-
-        background-color: rgb(251, 255, 32);
-        color: black;
-        border: none;
-        border-radius: 5px;
-        padding: 5px;
-        margin-left: 10px;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .container-form{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-        flex-wrap: nowrap;
-    }
-    
-    #current {
-    width: 80%;
-    margin: 20px auto;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-
-h1 {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    margin-top: 10px;
-}
-
-input[type="text"] {
-    width: calc(100% - 10px);
-    padding: 10px;
-
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-}
-
-input[type="text"]:read-only {
-    background-color: #eee;
-    border-color: #ddd;
-    color: #888;
-}
-
-input[type="text"]:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-.showPremium {
-    width: calc(100% - 100px) !important;
-}
-</style>
