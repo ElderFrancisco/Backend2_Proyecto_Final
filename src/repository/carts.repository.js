@@ -38,7 +38,6 @@ export default class CartRepository {
     const carritosConProducto = await this.dao.getManyByQuery({
       'products.product': id,
     });
-    console.log(carritosConProducto);
     for (const carrito of carritosConProducto) {
       // Filtrar la lista de productos del carrito para eliminar el producto específico
       carrito.products = carrito.products.filter(

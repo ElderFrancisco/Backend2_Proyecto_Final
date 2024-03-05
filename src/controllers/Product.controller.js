@@ -80,14 +80,10 @@ export const addProduct = async (req, res) => {
         .status(409)
         .json({ status: 'error', error: 'Code Already exists' });
     }
-    // const pathWithoutSrc = element.path.replace('src\\public', '');
-    // user.documents.push({ name: element.originalname, path: pathWithoutSrc });
-    // console.log(req.file);
     const pathWithoutSrc = req.file.path.replace(
       /^.*src[\/\\]public[\/\\]/,
       '\\',
     );
-    console.log(pathWithoutSrc);
 
     req.body.thumbnail = [pathWithoutSrc];
 
@@ -146,16 +142,13 @@ export const updateProductById = async (req, res) => {
     const productCode = await ProductService.getByQuery({
       code: req.body.code,
     });
-    console.log(productCode);
-    console.log(body.code);
-    console.log(productToUpdate.code);
     if (productCode && body.code !== productToUpdate.code) {
       return res
         .status(409)
         .json({ status: 'error', error: 'Code Already exists' });
     }
     body['_id'] = Id;
-    console.log(body);
+
     const result = await ProductService.update(body);
     return res.status(200).json({ status: 'success', payload: result });
   } catch (error) {
