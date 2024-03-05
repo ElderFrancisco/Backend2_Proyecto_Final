@@ -64,9 +64,9 @@ export const getUsers = async (req, res) => {
 
 export const deleteInactiveUsers = async (req, res) => {
   try {
-    const thirtyMinutesAgo = new Date();
-    thirtyMinutesAgo.setMinutes(thirtyMinutesAgo.getMinutes() - 30);
-    const result = await UserService.deleteInactive(thirtyMinutesAgo);
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const result = await UserService.deleteInactive(twoDaysAgo);
     return res.status(200).json({ status: 'success', payload: result });
   } catch (error) {
     req.logger.error(`Error en deleteInactiveUsers: ${error}`);
